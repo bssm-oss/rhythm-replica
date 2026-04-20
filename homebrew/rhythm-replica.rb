@@ -1,6 +1,6 @@
 cask "rhythm-replica" do
   version "0.1.3"
-  sha256 "10fb70f45faee345a7f54281711006f0a9dfc133f303084a18334db3a8cf113b"
+  sha256 "493085428c66afeee0e13547f2095430e0a23a35da99b301feece1a1cc9571ee"
 
   url "https://github.com/bssm-oss/rhythm-replica/releases/download/v#{version}/RhythmReplica.dmg"
   name "Rhythm Replica"

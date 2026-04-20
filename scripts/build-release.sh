@@ -59,6 +59,7 @@ if [[ ! -d "/Applications/Xcode.app" ]]; then
 </dict>
 </plist>
 EOF
+  codesign --force --deep --sign - "$APP_BUNDLE_PATH"
   echo "Created fallback app bundle at $APP_BUNDLE_PATH"
   exit 0
 fi
