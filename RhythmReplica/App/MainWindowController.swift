@@ -39,6 +39,7 @@ final class MainTabViewController: NSTabViewController {
         addTab(named: "Settings", image: NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)) {
             SettingsViewController(environment: environment)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNavigation(_:)), name: .navigateToTab, object: nil)
     }
 
     @available(*, unavailable)
@@ -53,5 +54,11 @@ final class MainTabViewController: NSTabViewController {
         item.label = title
         item.image = image
         addTabViewItem(item)
+    }
+
+    @objc private func handleNavigation(_ notification: Notification) {
+        guard let tab = notification.userInfo?["tab"] as? String,
+              let index = tabViewItems.firstIndex(where: { $0.label == tab }) else { return }
+        selectedTabViewItemIndex = index
     }
 }

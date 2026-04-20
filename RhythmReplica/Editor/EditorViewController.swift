@@ -14,6 +14,7 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
     private let snapControl = NSSegmentedControl(labels: ["1/1", "1/2", "1/4", "1/8", "1/16", "1/3", "1/6"], trackingMode: .selectOne, target: nil, action: nil)
     private let modeControl = NSSegmentedControl(labels: ["Q", "W", "E", "R", "T"], trackingMode: .selectOne, target: nil, action: nil)
     private let lanePopup = NSPopUpButton(frame: .zero, pullsDown: false)
+    private let noteTypePopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let zoomSlider = NSSlider(value: 1.0, minValue: 0.5, maxValue: 4.0, target: nil, action: nil)
     private var chart = Chart.empty
     private var playbackTimer: Timer?
@@ -49,8 +50,11 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         snapControl.selectedSegment = 2
         modeControl.selectedSegment = 0
         lanePopup.addItems(withTitles: ["Lane 1", "Lane 2", "Lane 3", "Lane 4"])
+        noteTypePopup.addItems(withTitles: EditorTimelineView.PlacementKind.allCases.map(\.rawValue))
         zoomSlider.target = self
         zoomSlider.action = #selector(updateZoom)
+        noteTypePopup.target = self
+        noteTypePopup.action = #selector(updatePlacementKind)
         snapControl.target = self
         snapControl.action = #selector(updateSnap)
         modeControl.target = self
@@ -94,7 +98,7 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         let helpButton = NSButton(title: "Shortcut Help", target: self, action: #selector(showShortcutHelp))
         let testPlayButton = NSButton(title: "Test Play", target: self, action: #selector(testPlay))
 
-        let metadataStack = NSStackView(views: [labeledField("BPM", field: bpmField), labeledField("TOTAL BEATS", field: totalBeatsField), labeledField("OFFSET", field: offsetField), labeledView("SNAP", snapControl), labeledView("MODE", modeControl), labeledView("STAMP LANE", lanePopup), labeledView("ZOOM", zoomSlider), loadButton, saveButton, sampleButton, openAudioButton, previewAudioButton, stampButton, undoButton, redoButton, copyButton, pasteButton, selectAllButton, deleteButton, helpButton, testPlayButton])
+        let metadataStack = NSStackView(views: [labeledField("BPM", field: bpmField), labeledField("TOTAL BEATS", field: totalBeatsField), labeledField("OFFSET", field: offsetField), labeledView("SNAP", snapControl), labeledView("MODE", modeControl), labeledView("NOTE TYPE", noteTypePopup), labeledView("STAMP LANE", lanePopup), labeledView("ZOOM", zoomSlider), loadButton, saveButton, sampleButton, openAudioButton, previewAudioButton, stampButton, undoButton, redoButton, copyButton, pasteButton, selectAllButton, deleteButton, helpButton, testPlayButton])
         metadataStack.orientation = .horizontal
         metadataStack.spacing = 8
 
@@ -154,6 +158,11 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         let modes: [EditorMode] = [.normal, .long, .delete, .edit, .select]
         timelineView.mode = modes[modeControl.selectedSegment]
         statusLabel.stringValue = "Mode: \(timelineView.mode.rawValue)"
+    }
+
+    @objc private func updatePlacementKind() {
+        let kinds = EditorTimelineView.PlacementKind.allCases
+        timelineView.placementKind = kinds[noteTypePopup.indexOfSelectedItem]
     }
 
     @objc private func loadChart() {
@@ -216,7 +225,8 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
     @objc private func testPlay() {
         applyMetadataFields()
         environment.sessionStore.currentChart = chart
-        statusLabel.stringValue = "Chart saved in session. Open Player tab to test play with the current chart."
+        NotificationCenter.default.post(name: .navigateToTab, object: self, userInfo: ["tab": "Player"])
+        statusLabel.stringValue = "현재 차트로 Player 탭을 열었습니다."
     }
 
     @objc private func handleSessionAudioChange() {
