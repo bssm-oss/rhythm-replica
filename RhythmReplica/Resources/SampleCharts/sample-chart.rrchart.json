@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "title": "Sample Track",
+  "artist": "Rhythm Replica",
+  "audioFileName": "sample-track.m4a",
+  "bpm": 120,
+  "totalBeats": 32,
+  "offset": 0,
+  "difficulty": "Normal",
+  "notes": [
+    {
+      "id": "9A5B5767-A88F-4648-8A9F-B7338F08FBF7",
+      "beat": 4,
+      "lane": 0,
+      "type": "normal",
+      "durationBeats": 0
+    },
+    {
+      "id": "3A2422FC-19E5-4E77-9B91-F08F511D7D75",
+      "beat": 8,
+      "lane": 1,
+      "type": "long",
+      "durationBeats": 2
+    },
+    {
+      "id": "F1D8570A-C7E7-449F-9923-8CCF5A762728",
+      "beat": 12,
+      "lane": 0,
+      "type": "specialLeft",
+      "durationBeats": 0
+    },
+    {
+      "id": "01F1B673-41A6-4548-A379-FAD00C91E639",
+      "beat": 16,
+      "lane": 3,
+      "type": "specialRight",
+      "durationBeats": 0
+    }
+  ]
+}
