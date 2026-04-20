@@ -1,0 +1,55 @@
+name: RhythmReplica
+options:
+  createIntermediateGroups: true
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.bssm.rhythmreplica
+    MACOSX_DEPLOYMENT_TARGET: 13.0
+    SWIFT_VERSION: 5.9
+    GENERATE_INFOPLIST_FILE: YES
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+targets:
+  RhythmReplica:
+    type: application
+    platform: macOS
+    sources:
+      - path: RhythmReplica
+    settings:
+      base:
+        PRODUCT_NAME: Rhythm Replica
+        INFOPLIST_KEY_CFBundleDisplayName: Rhythm Replica
+        INFOPLIST_KEY_LSMinimumSystemVersion: 13.0
+        INFOPLIST_KEY_NSHighResolutionCapable: true
+        INFOPLIST_KEY_NSAppleEventsUsageDescription: Rhythm Replica uses user-selected helper tools for optional import workflows.
+        INFOPLIST_KEY_NSHumanReadableCopyright: Copyright © 2026 BSSM OSS
+        INFOPLIST_KEY_NSPrincipalClass: NSApplication
+        INFOPLIST_KEY_NSMainNibFile: ""
+        INFOPLIST_KEY_CFBundleDocumentTypes:
+          - CFBundleTypeName: Rhythm Replica Chart
+            LSHandlerRank: Owner
+            LSItemContentTypes:
+              - com.bssm.rhythm-replica.chart
+        INFOPLIST_KEY_UTExportedTypeDeclarations:
+          - UTTypeIdentifier: com.bssm.rhythm-replica.chart
+            UTTypeDescription: Rhythm Replica Chart JSON
+            UTTypeConformsTo:
+              - public.json
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - rrchart.json
+                - json
+    scheme:
+      testTargets:
+        - RhythmReplicaTests
+  RhythmReplicaTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: RhythmReplicaTests
+    dependencies:
+      - target: RhythmReplica
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
