@@ -327,7 +327,8 @@ private final class PlayfieldView: NSView {
 
         engine?.visibleNotes().forEach { visible in
             let y = dirtyRect.height * CGFloat(visible.normalizedY)
-            NoteRenderer.draw(note: visible.note, rect: dirtyRect, in: laneWidth, yPosition: y)
+            let height = dirtyRect.height * CGFloat(visible.normalizedHeight)
+            NoteRenderer.draw(note: visible.note, rect: dirtyRect, in: laneWidth, yPosition: y, noteHeight: height)
         }
     }
 }

@@ -26,6 +26,14 @@ final class EditorTimelineView: NSView {
     private var selectionRect: CGRect?
     private var dragOperation: DragOperation?
 
+    private var visibleBeatRange: ClosedRange<Double> {
+        0...max(4, chart.totalBeats / zoomScale)
+    }
+
+    private var visibleBeats: Double {
+        visibleBeatRange.upperBound - visibleBeatRange.lowerBound
+    }
+
     override func draw(_ dirtyRect: NSRect) {
         RRColor.elevatedBackground.setFill()
         dirtyRect.fill()
@@ -37,13 +45,13 @@ final class EditorTimelineView: NSView {
             NSBezierPath.strokeLine(from: NSPoint(x: x, y: 0), to: NSPoint(x: x, y: dirtyRect.height))
         }
 
-        let beatsPerScreen = max(4, chart.totalBeats / zoomScale)
-        let pixelsPerBeat = dirtyRect.height / CGFloat(beatsPerScreen)
-        let subdivisions = Int(chart.totalBeats * snapDivisor)
+        let pixelsPerBeat = dirtyRect.height / CGFloat(visibleBeats)
+        let subdivisions = Int(visibleBeatRange.upperBound * snapDivisor)
         if subdivisions > 0 {
             for index in 0...subdivisions {
                 let beat = Double(index) / snapDivisor
-                let y = dirtyRect.height - CGFloat(beat) * pixelsPerBeat
+                let y = yPosition(forBeat: beat, in: dirtyRect.height)
+                guard y >= 0, y <= dirtyRect.height else { continue }
                 let color = index % Int(snapDivisor) == 0 ? RRColor.secondaryText : RRColor.border
                 color.setStroke()
                 NSBezierPath.strokeLine(from: NSPoint(x: 0, y: y), to: NSPoint(x: dirtyRect.width, y: y))
@@ -65,7 +73,7 @@ final class EditorTimelineView: NSView {
         }
 
         RRColor.accentBlue.setStroke()
-        let headY = dirtyRect.height - CGFloat(playbackBeat) * pixelsPerBeat
+        let headY = yPosition(forBeat: playbackBeat, in: dirtyRect.height)
         NSBezierPath.strokeLine(from: NSPoint(x: 0, y: headY), to: NSPoint(x: dirtyRect.width, y: headY))
     }
 
@@ -102,8 +110,7 @@ final class EditorTimelineView: NSView {
             } else if let note = chart.notes.first(where: { hitTest(note: $0, beat: beat, lane: lane) }) {
                 selectedNoteIDs = [note.id]
                 let laneWidth = bounds.width / 4
-                let beatsPerScreen = max(4, chart.totalBeats / zoomScale)
-                let pixelsPerBeat = bounds.height / CGFloat(beatsPerScreen)
+                let pixelsPerBeat = bounds.height / CGFloat(visibleBeats)
                 let noteRect = rect(for: note, laneWidth: laneWidth, pixelsPerBeat: pixelsPerBeat, in: bounds)
                 let originals = Dictionary(uniqueKeysWithValues: chart.notes.filter { selectedNoteIDs.contains($0.id) }.map { ($0.id, $0) })
                 if note.type == .long && abs(point.y - noteRect.minY) < 12 {
@@ -223,7 +230,7 @@ final class EditorTimelineView: NSView {
 
     private func snappedBeat(for y: CGFloat) -> Double {
         let ratio = max(0, min(1, 1 - (y / bounds.height)))
-        let rawBeat = ratio * chart.totalBeats
+        let rawBeat = visibleBeatRange.lowerBound + ratio * visibleBeats
         let step = 1 / snapDivisor
         return (rawBeat / step).rounded() * step
     }
@@ -234,7 +241,7 @@ final class EditorTimelineView: NSView {
 
     private func rect(for note: Note, laneWidth: CGFloat, pixelsPerBeat: CGFloat, in dirtyRect: CGRect) -> CGRect {
         let x = CGFloat(note.lane) * laneWidth + 8
-        let y = dirtyRect.height - CGFloat(note.beat) * pixelsPerBeat - 16
+        let y = yPosition(forBeat: note.beat, in: dirtyRect.height) - 16
         let height = max(18, CGFloat(note.durationBeats) * pixelsPerBeat)
         return CGRect(x: x, y: y - height, width: laneWidth - 16, height: height)
     }
@@ -242,10 +249,14 @@ final class EditorTimelineView: NSView {
     private func updateSelectionFromRect() {
         guard let selectionRect else { return }
         let laneWidth = bounds.width / 4
-        let beatsPerScreen = max(4, chart.totalBeats / zoomScale)
-        let pixelsPerBeat = bounds.height / CGFloat(beatsPerScreen)
+        let pixelsPerBeat = bounds.height / CGFloat(visibleBeats)
         let selected = chart.notes.filter { rect(for: $0, laneWidth: laneWidth, pixelsPerBeat: pixelsPerBeat, in: bounds).intersects(selectionRect) }
         selectedNoteIDs = Set(selected.map(\.id))
+    }
+
+    private func yPosition(forBeat beat: Double, in height: CGFloat) -> CGFloat {
+        let relativeBeat = beat - visibleBeatRange.lowerBound
+        return height - CGFloat(relativeBeat / visibleBeats) * height
     }
 
     private func color(for type: NoteType) -> NSColor {
