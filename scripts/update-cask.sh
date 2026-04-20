@@ -14,13 +14,13 @@ SHA="$2"
 python3 - "$CASK_FILE" "$VERSION" "$SHA" <<'PY'
 from pathlib import Path
 import sys
+import re
 
 path = Path(sys.argv[1])
 version = sys.argv[2]
 sha = sys.argv[3]
 text = path.read_text()
-text = text.replace('version "0.1.0"', f'version "{version}"')
-import re
+text = re.sub(r'version ".*"', f'version "{version}"', text, count=1)
 text = re.sub(r'sha256 ".*"', f'sha256 "{sha}"', text)
 path.write_text(text)
 PY

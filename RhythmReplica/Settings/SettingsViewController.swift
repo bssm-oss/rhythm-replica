@@ -53,7 +53,7 @@ final class SettingsViewController: NSViewController {
 
         themePopup.addItems(withTitles: ThemePreference.allCases.map(\.rawValue))
         themePopup.selectItem(withTitle: preferences.theme.rawValue)
-        outputDevicePopup.addItems(withTitles: ["System Default (routing not configurable yet)"])
+        outputDevicePopup.addItems(withTitles: ["System Default (AVAudioEngine output routing unavailable in this build)"])
         outputDevicePopup.selectItem(withTitle: preferences.outputDeviceName)
         outputDevicePopup.isEnabled = false
         youtubeBehaviorPopup.addItems(withTitles: YouTubeImportBehavior.allCases.map(\.rawValue))
@@ -66,6 +66,7 @@ final class SettingsViewController: NSViewController {
         let saveButton = NSButton(title: "Save Settings", target: self, action: #selector(saveSettings))
         let openCacheButton = NSButton(title: "Open Cache Folder", target: self, action: #selector(openCacheFolder))
         let clearCacheButton = NSButton(title: "Clear Cache", target: self, action: #selector(clearCache))
+        let versionLabel = NSTextField(labelWithString: appVersionString())
 
         statusLabel.textColor = RRColor.primaryText
 
@@ -85,7 +86,7 @@ final class SettingsViewController: NSViewController {
             saveButton,
             openCacheButton,
             clearCacheButton,
-            NSTextField(labelWithString: "App Version: 0.1.0-dev"),
+            versionLabel,
             statusLabel
         ])
         stack.orientation = .vertical
@@ -115,7 +116,7 @@ final class SettingsViewController: NSViewController {
         preferences.goodWindowMilliseconds = Double(goodWindowField.stringValue) ?? preferences.goodWindowMilliseconds
         preferences.badWindowMilliseconds = Double(badWindowField.stringValue) ?? preferences.badWindowMilliseconds
         preferences.theme = ThemePreference(rawValue: themePopup.selectedItem?.title ?? ThemePreference.system.rawValue) ?? .system
-        preferences.outputDeviceName = outputDevicePopup.selectedItem?.title ?? "System Default (routing not configurable yet)"
+        preferences.outputDeviceName = outputDevicePopup.selectedItem?.title ?? "System Default (AVAudioEngine output routing unavailable in this build)"
         preferences.youtubeImportBehavior = YouTubeImportBehavior(rawValue: youtubeBehaviorPopup.selectedItem?.title ?? YouTubeImportBehavior.cacheFolder.rawValue) ?? .cacheFolder
         preferences.keyBindings = KeyBindingConfiguration(
             lane0: lane0Field.stringValue.lowercased(),
@@ -166,5 +167,22 @@ final class SettingsViewController: NSViewController {
             label.textColor = RRColor.primaryText
         }
         return container
+    }
+
+    private func appVersionString() -> String {
+        let bundle = Bundle.main
+        let shortVersion = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        let buildVersion = bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String
+
+        switch (shortVersion, buildVersion) {
+        case let (short?, build?) where short != build:
+            return "App Version: \(short) (\(build))"
+        case let (short?, _):
+            return "App Version: \(short)"
+        case let (_, build?):
+            return "App Version: \(build)"
+        default:
+            return "App Version: dev"
+        }
     }
 }

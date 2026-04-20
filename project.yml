@@ -7,6 +7,8 @@ settings:
     MACOSX_DEPLOYMENT_TARGET: 13.0
     SWIFT_VERSION: 5.9
     GENERATE_INFOPLIST_FILE: YES
+    MARKETING_VERSION: 0.1.3
+    CURRENT_PROJECT_VERSION: 1
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ""
     ENABLE_HARDENED_RUNTIME: NO
@@ -39,7 +41,6 @@ targets:
             UTTypeTagSpecification:
               public.filename-extension:
                 - rrchart.json
-                - json
     scheme:
       testTargets:
         - RhythmReplicaTests

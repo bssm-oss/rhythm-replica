@@ -32,5 +32,5 @@ Secrets가 없으면 unsigned local build만 수행합니다.
 릴리즈가 생성되고 SHA256이 계산된 뒤 아래 스크립트로 Cask를 갱신합니다.
 
 ```bash
-./scripts/update-cask.sh 0.1.0 <sha256>
+./scripts/update-cask.sh 0.1.3 <sha256>
 ```
