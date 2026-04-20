@@ -147,7 +147,7 @@ final class PlayerViewController: NSViewController {
                     chart.audioFileName = url.lastPathComponent
                     self.environment.sessionStore.currentChart = chart
                 }
-                self.statusLabel.stringValue = "Audio: \(url.lastPathComponent)"
+                self.statusLabel.stringValue = self.persistChartAudioLinkStatus(audioURL: url)
                 self.environment.recentProjectsStore.add(chartURL: self.environment.sessionStore.currentChartURL, audioURL: url)
                 self.updateMismatchWarning()
             } catch {
@@ -282,6 +282,18 @@ final class PlayerViewController: NSViewController {
         mismatchLabel.stringValue = audioURL.lastPathComponent == environment.sessionStore.currentChart.audioFileName
             ? ""
             : "현재 오디오(\(audioURL.lastPathComponent))와 채보 오디오(\(environment.sessionStore.currentChart.audioFileName))가 다릅니다."
+    }
+
+    private func persistChartAudioLinkStatus(audioURL: URL) -> String {
+        guard environment.sessionStore.currentChart != .empty else {
+            return "Audio: \(audioURL.lastPathComponent)"
+        }
+        do {
+            try environment.persistCurrentChart()
+            return "차트에 오디오 파일명을 저장했습니다: \(audioURL.lastPathComponent)"
+        } catch {
+            return error.localizedDescription
+        }
     }
 }
 

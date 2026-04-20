@@ -21,3 +21,16 @@ xcodegen generate
 - `CERTIFICATE_PASSWORD`
 
 Secrets가 없으면 unsigned local build만 수행합니다.
+
+## 서명 / 공증 동작
+
+- GitHub Actions `release.yml`은 시크릿이 모두 있는 경우에만 Developer ID 인증서 import, codesign, notarization, stapling 단계를 실행합니다.
+- 시크릿이 없으면 unsigned `.app` / `.dmg`를 계속 생성합니다.
+
+## Homebrew Cask 갱신
+
+릴리즈가 생성되고 SHA256이 계산된 뒤 아래 스크립트로 Cask를 갱신합니다.
+
+```bash
+./scripts/update-cask.sh 0.1.0 <sha256>
+```

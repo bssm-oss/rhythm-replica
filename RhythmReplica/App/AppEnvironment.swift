@@ -1,5 +1,16 @@
 import Foundation
 
+enum ChartPersistenceError: LocalizedError {
+    case missingChartURL
+
+    var errorDescription: String? {
+        switch self {
+        case .missingChartURL:
+            return "아직 차트 파일 경로가 없어 오디오 연결 정보를 디스크에 저장할 수 없습니다. 먼저 JSON으로 저장해 주세요."
+        }
+    }
+}
+
 final class AppEnvironment {
     let preferencesStore: PreferencesStore
     let recentProjectsStore: RecentProjectsStore
@@ -66,5 +77,13 @@ final class AppEnvironment {
             inputManager: InputManager(keyBindingManager: keyBindingManager),
             sessionStore: sessionStore
         )
+    }
+
+    func persistCurrentChart() throws {
+        guard let url = sessionStore.currentChartURL else {
+            throw ChartPersistenceError.missingChartURL
+        }
+        let data = try chartExporter.exportInternal(sessionStore.currentChart)
+        try data.write(to: url)
     }
 }

@@ -338,7 +338,7 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
             do {
                 try self.environment.audioPlaybackService.load(url: url)
                 self.loadWaveform(for: url)
-                self.statusLabel.stringValue = "Audio linked: \(url.lastPathComponent)"
+                self.statusLabel.stringValue = self.persistChartAudioLinkStatus(audioURL: url)
                 self.environment.recentProjectsStore.add(chartURL: self.environment.sessionStore.currentChartURL, audioURL: url)
             } catch {
                 self.statusLabel.stringValue = error.localizedDescription
@@ -370,6 +370,18 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         let autosaveURL = autosaveDirectory.appendingPathComponent("latest.rrchart.json")
         if let data = try? environment.chartExporter.exportInternal(chart) {
             try? data.write(to: autosaveURL)
+        }
+    }
+
+    private func persistChartAudioLinkStatus(audioURL: URL) -> String {
+        guard chart != .empty else {
+            return "Audio linked: \(audioURL.lastPathComponent)"
+        }
+        do {
+            try environment.persistCurrentChart()
+            return "차트에 오디오 파일명을 저장했습니다: \(audioURL.lastPathComponent)"
+        } catch {
+            return error.localizedDescription
         }
     }
 
