@@ -20,10 +20,6 @@ jobs:
         run: /usr/bin/xcodebuild -project RhythmReplica.xcodeproj -scheme RhythmReplica -destination 'platform=macOS' test
       - name: Build release app
         run: ./scripts/build-release.sh
-      - name: Package DMG
-        run: ./scripts/package-dmg.sh
-      - name: SHA256
-        run: ./scripts/sha256.sh build/RhythmReplica.dmg > build/RhythmReplica.dmg.sha256
       - name: Import signing certificate
         if: ${{ secrets.CERTIFICATE_P12 != '' && secrets.CERTIFICATE_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
@@ -42,15 +38,20 @@ jobs:
           codesign --force --deep --options runtime --sign "$DEVELOPER_ID_APPLICATION" "build/Products/Rhythm Replica.app"
         env:
           DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+      - name: Package DMG
+        run: ./scripts/package-dmg.sh
       - name: Notarize app bundle
         if: ${{ secrets.APPLE_ID != '' && secrets.APPLE_TEAM_ID != '' && secrets.APP_SPECIFIC_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
           xcrun notarytool submit "build/RhythmReplica.dmg" --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APP_SPECIFIC_PASSWORD" --wait
           xcrun stapler staple "build/Products/Rhythm Replica.app"
+          xcrun stapler staple "build/RhythmReplica.dmg"
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+      - name: SHA256
+        run: ./scripts/sha256.sh build/RhythmReplica.dmg > build/RhythmReplica.dmg.sha256
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:

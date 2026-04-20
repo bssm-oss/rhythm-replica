@@ -3,6 +3,7 @@ import Foundation
 struct VisibleNote {
     let note: Note
     let normalizedY: Double
+    let normalizedHeight: Double
 }
 
 final class GameEngine {
@@ -49,7 +50,9 @@ final class GameEngine {
             let distance = noteTime - currentTime
             guard distance >= -0.2, distance <= window else { return nil }
             let normalizedY = 0.85 - (distance * 0.35 * speed)
-            return VisibleNote(note: note, normalizedY: normalizedY)
+            let durationSeconds = note.durationBeats * TimingConverter.secondsPerBeat(bpm: chart.bpm)
+            let normalizedHeight = max(0.02, durationSeconds * 0.35 * speed)
+            return VisibleNote(note: note, normalizedY: normalizedY, normalizedHeight: normalizedHeight)
         }
     }
 
