@@ -6,6 +6,7 @@ final class YouTubeImportViewController: NSViewController {
     private let urlField = NSTextField(string: "")
     private let statusLabel = NSTextField(labelWithString: "")
     private let metadataLabel = NSTextField(wrappingLabelWithString: "")
+    private let thumbnailView = NSImageView(frame: .zero)
     private let progressIndicator = NSProgressIndicator()
     private var currentTask: YouTubeImportTask?
 
@@ -44,10 +45,19 @@ final class YouTubeImportViewController: NSViewController {
         let importButton = NSButton(title: "Start Import", target: self, action: #selector(startImport))
         let cancelButton = NSButton(title: "Cancel", target: self, action: #selector(cancelImport))
 
-        progressIndicator.isIndeterminate = true
+        progressIndicator.isIndeterminate = false
+        progressIndicator.minValue = 0
+        progressIndicator.maxValue = 100
+        progressIndicator.doubleValue = 0
         progressIndicator.style = .bar
         progressIndicator.controlTint = .blueControlTint
         progressIndicator.isDisplayedWhenStopped = false
+
+        thumbnailView.wantsLayer = true
+        thumbnailView.imageScaling = .scaleAxesIndependently
+        thumbnailView.layer?.cornerRadius = 6
+        thumbnailView.layer?.masksToBounds = true
+        thumbnailView.setFrameSize(NSSize(width: 240, height: 135))
 
         [statusLabel, metadataLabel].forEach {
             $0.textColor = RRColor.primaryText
@@ -58,7 +68,7 @@ final class YouTubeImportViewController: NSViewController {
         buttonRow.orientation = .horizontal
         buttonRow.spacing = 8
 
-        let stack = NSStackView(views: [noticeLabel, toolLabel, urlField, buttonRow, progressIndicator, metadataLabel, statusLabel])
+        let stack = NSStackView(views: [noticeLabel, toolLabel, urlField, buttonRow, progressIndicator, thumbnailView, metadataLabel, statusLabel])
         stack.orientation = .vertical
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +88,7 @@ final class YouTubeImportViewController: NSViewController {
             let metadata = try service.fetchMetadata(for: urlField.stringValue)
             metadataLabel.stringValue = "제목: \(metadata.title ?? "알 수 없음")\n길이: \(metadata.duration.map { String(format: "%.1f초", $0) } ?? "알 수 없음")\n썸네일: \(metadata.thumbnail ?? "없음")"
             statusLabel.stringValue = "메타데이터를 불러왔습니다."
+            loadThumbnail(from: metadata.thumbnail)
         } catch {
             statusLabel.stringValue = error.localizedDescription
         }
@@ -103,13 +114,13 @@ final class YouTubeImportViewController: NSViewController {
             }
             let task = try service.startImport(from: urlField.stringValue, destinationDirectory: destination)
             currentTask = task
-            progressIndicator.startAnimation(nil)
+            progressIndicator.doubleValue = 0
             statusLabel.stringValue = "가져오기를 시작했습니다."
             task.onProgress = { [weak self] line in
-                self?.statusLabel.stringValue = line.isEmpty ? "진행 중..." : line
+                self?.updateProgress(from: line)
             }
             task.onCompletion = { [weak self] result in
-                self?.progressIndicator.stopAnimation(nil)
+                self?.progressIndicator.doubleValue = 100
                 switch result {
                 case .success(let url):
                     self?.statusLabel.stringValue = "가져오기 완료: \(url.lastPathComponent)"
@@ -126,8 +137,35 @@ final class YouTubeImportViewController: NSViewController {
 
     @objc private func cancelImport() {
         currentTask?.cancel()
-        progressIndicator.stopAnimation(nil)
+        progressIndicator.doubleValue = 0
         statusLabel.stringValue = "가져오기를 취소했습니다."
         currentTask = nil
+    }
+
+    private func updateProgress(from line: String) {
+        let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            statusLabel.stringValue = "진행 중..."
+            return
+        }
+        statusLabel.stringValue = trimmed
+        let pattern = #"([0-9]+(?:\.[0-9]+)?)%"#
+        if let regex = try? NSRegularExpression(pattern: pattern),
+           let match = regex.firstMatch(in: trimmed, range: NSRange(trimmed.startIndex..., in: trimmed)),
+           let range = Range(match.range(at: 1), in: trimmed),
+           let value = Double(trimmed[range]) {
+            progressIndicator.doubleValue = value
+        }
+    }
+
+    private func loadThumbnail(from urlString: String?) {
+        thumbnailView.image = nil
+        guard let urlString, let url = URL(string: urlString) else { return }
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let data = try? Data(contentsOf: url), let image = NSImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self?.thumbnailView.image = image
+            }
+        }
     }
 }

@@ -8,9 +8,13 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
     private let miniMapView = TimelineMiniMapView(frame: .zero)
     private let statusLabel = NSTextField(labelWithString: "No chart loaded")
     private let chartInfoLabel = NSTextField(labelWithString: "TOTAL NOTES 0 • NORMAL 0 • LONG 0 • SPECIAL 0 • DENSITY 0")
+    private let currentBeatLabel = NSTextField(labelWithString: "Current Beat 0.00 • Current Time 0.00s")
+    private let validationLabel = NSTextField(wrappingLabelWithString: "Validation: no issues")
     private let bpmField = NSTextField(string: "120")
     private let totalBeatsField = NSTextField(string: "64")
     private let offsetField = NSTextField(string: "0.0")
+    private let testBeatField = NSTextField(string: "0")
+    private let testTimeField = NSTextField(string: "0.0")
     private let snapControl = NSSegmentedControl(labels: ["1/1", "1/2", "1/4", "1/8", "1/16", "1/3", "1/6"], trackingMode: .selectOne, target: nil, action: nil)
     private let modeControl = NSSegmentedControl(labels: ["Q", "W", "E", "R", "T"], trackingMode: .selectOne, target: nil, action: nil)
     private let lanePopup = NSPopUpButton(frame: .zero, pullsDown: false)
@@ -42,10 +46,11 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         view.wantsLayer = true
         view.layer?.backgroundColor = RRColor.baseBackground.cgColor
 
-        [statusLabel, chartInfoLabel].forEach {
+        [statusLabel, chartInfoLabel, currentBeatLabel, validationLabel].forEach {
             $0.textColor = RRColor.primaryText
             $0.font = RRTypography.body()
         }
+        validationLabel.maximumNumberOfLines = 3
 
         snapControl.selectedSegment = 2
         modeControl.selectedSegment = 0
@@ -95,14 +100,17 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         let pasteButton = NSButton(title: "Paste", target: self, action: #selector(pasteSelection))
         let selectAllButton = NSButton(title: "Select All", target: self, action: #selector(selectAllNotes))
         let deleteButton = NSButton(title: "Delete", target: self, action: #selector(deleteSelection))
+        let validateButton = NSButton(title: "Validate Chart", target: self, action: #selector(validateChart))
+        let goToBeatButton = NSButton(title: "Go To Beat", target: self, action: #selector(goToBeat))
+        let goToTimeButton = NSButton(title: "Go To Time", target: self, action: #selector(goToTime))
         let helpButton = NSButton(title: "Shortcut Help", target: self, action: #selector(showShortcutHelp))
         let testPlayButton = NSButton(title: "Test Play", target: self, action: #selector(testPlay))
 
-        let metadataStack = NSStackView(views: [labeledField("BPM", field: bpmField), labeledField("TOTAL BEATS", field: totalBeatsField), labeledField("OFFSET", field: offsetField), labeledView("SNAP", snapControl), labeledView("MODE", modeControl), labeledView("NOTE TYPE", noteTypePopup), labeledView("STAMP LANE", lanePopup), labeledView("ZOOM", zoomSlider), loadButton, saveButton, sampleButton, openAudioButton, previewAudioButton, stampButton, undoButton, redoButton, copyButton, pasteButton, selectAllButton, deleteButton, helpButton, testPlayButton])
+        let metadataStack = NSStackView(views: [labeledField("BPM", field: bpmField), labeledField("TOTAL BEATS", field: totalBeatsField), labeledField("OFFSET", field: offsetField), labeledField("TEST BEAT", field: testBeatField), labeledField("TEST TIME", field: testTimeField), labeledView("SNAP", snapControl), labeledView("MODE", modeControl), labeledView("NOTE TYPE", noteTypePopup), labeledView("STAMP LANE", lanePopup), labeledView("ZOOM", zoomSlider), loadButton, saveButton, sampleButton, openAudioButton, previewAudioButton, stampButton, undoButton, redoButton, copyButton, pasteButton, selectAllButton, deleteButton, validateButton, goToBeatButton, goToTimeButton, helpButton, testPlayButton])
         metadataStack.orientation = .horizontal
         metadataStack.spacing = 8
 
-        let stack = NSStackView(views: [metadataStack, statusLabel, chartInfoLabel, waveformView, miniMapView, timelineView])
+        let stack = NSStackView(views: [metadataStack, statusLabel, currentBeatLabel, chartInfoLabel, validationLabel, waveformView, miniMapView, timelineView])
         stack.orientation = .vertical
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -145,6 +153,7 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
             let beat = TimingConverter.beat(forTime: time, bpm: self.chart.bpm, offset: self.chart.offset)
             self.timelineView.playbackBeat = beat
             self.miniMapView.playbackBeat = beat
+            self.currentBeatLabel.stringValue = String(format: "Current Beat %.2f • Current Time %.2fs", beat, time)
         }
     }
 
@@ -233,6 +242,33 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         statusLabel.stringValue = "현재 차트로 Player 탭을 열었습니다."
     }
 
+    @objc private func validateChart() {
+        let issues = environment.chartValidator.validate(chart)
+        validationLabel.stringValue = issues.isEmpty
+            ? "Validation: no issues"
+            : "Validation: " + issues.map(\.message).joined(separator: " • ")
+    }
+
+    @objc private func goToBeat() {
+        let beat = Double(testBeatField.stringValue) ?? 0
+        let time = TimingConverter.time(forBeat: beat, bpm: chart.bpm, offset: chart.offset)
+        try? environment.audioPlaybackService.seek(to: time)
+        timelineView.playbackBeat = beat
+        miniMapView.playbackBeat = beat
+        currentBeatLabel.stringValue = String(format: "Current Beat %.2f • Current Time %.2fs", beat, time)
+        statusLabel.stringValue = String(format: "Moved to beat %.2f", beat)
+    }
+
+    @objc private func goToTime() {
+        let time = Double(testTimeField.stringValue) ?? 0
+        let beat = TimingConverter.beat(forTime: time, bpm: chart.bpm, offset: chart.offset)
+        try? environment.audioPlaybackService.seek(to: time)
+        timelineView.playbackBeat = beat
+        miniMapView.playbackBeat = beat
+        currentBeatLabel.stringValue = String(format: "Current Beat %.2f • Current Time %.2fs", beat, time)
+        statusLabel.stringValue = String(format: "Moved to time %.2fs", time)
+    }
+
     @objc private func handleSessionAudioChange() {
         guard let url = environment.sessionStore.currentAudioURL else { return }
         loadWaveform(for: url)
@@ -267,6 +303,9 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         timelineView.chart = chart
         let issues = environment.chartValidator.validate(chart)
         statusLabel.stringValue = issues.isEmpty ? "Chart metadata updated" : issues.map(\.message).joined(separator: " • ")
+        validationLabel.stringValue = issues.isEmpty
+            ? "Validation: no issues"
+            : "Validation: " + issues.map(\.message).joined(separator: " • ")
         autosaveCurrentChart()
     }
 
