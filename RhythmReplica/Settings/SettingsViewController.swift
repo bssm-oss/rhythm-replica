@@ -9,6 +9,7 @@ final class SettingsViewController: NSViewController {
     private let judgementLineField = NSTextField(string: "0.85")
     private let themePopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let outputDevicePopup = NSPopUpButton(frame: .zero, pullsDown: false)
+    private let youtubeBehaviorPopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let lane0Field = NSTextField(string: "d")
     private let lane1Field = NSTextField(string: "f")
     private let lane2Field = NSTextField(string: "j")
@@ -46,8 +47,10 @@ final class SettingsViewController: NSViewController {
 
         themePopup.addItems(withTitles: ThemePreference.allCases.map(\.rawValue))
         themePopup.selectItem(withTitle: preferences.theme.rawValue)
-        outputDevicePopup.addItem(withTitle: "오디오 출력 장치 선택 (준비 중)")
-        outputDevicePopup.isEnabled = false
+        outputDevicePopup.addItems(withTitles: ["System Default"])
+        outputDevicePopup.selectItem(withTitle: preferences.outputDeviceName)
+        youtubeBehaviorPopup.addItems(withTitles: YouTubeImportBehavior.allCases.map(\.rawValue))
+        youtubeBehaviorPopup.selectItem(withTitle: preferences.youtubeImportBehavior.rawValue)
         let detection = environment.youtubeImportService.detectTools()
         youtubeBehaviorLabel.stringValue = "YouTube 가져오기: 사용자가 설치한 yt-dlp/ffmpeg만 사용합니다. yt-dlp=\(detection.ytDlpPath?.lastPathComponent ?? "없음"), ffmpeg=\(detection.ffmpegPath?.lastPathComponent ?? "없음")"
         youtubeBehaviorLabel.textColor = RRColor.secondaryText
@@ -67,6 +70,7 @@ final class SettingsViewController: NSViewController {
             keyBindingRow(),
             labeled("Theme", themePopup),
             labeled("Audio Output Device", outputDevicePopup),
+            labeled("YouTube Import Behavior", youtubeBehaviorPopup),
             labeled("YouTube Import", youtubeBehaviorLabel),
             saveButton,
             openCacheButton,
@@ -98,6 +102,8 @@ final class SettingsViewController: NSViewController {
         preferences.defaultSpeed = Double(defaultSpeedField.stringValue) ?? preferences.defaultSpeed
         preferences.judgementLineRatio = Double(judgementLineField.stringValue) ?? preferences.judgementLineRatio
         preferences.theme = ThemePreference(rawValue: themePopup.selectedItem?.title ?? ThemePreference.system.rawValue) ?? .system
+        preferences.outputDeviceName = outputDevicePopup.selectedItem?.title ?? "System Default"
+        preferences.youtubeImportBehavior = YouTubeImportBehavior(rawValue: youtubeBehaviorPopup.selectedItem?.title ?? YouTubeImportBehavior.cacheFolder.rawValue) ?? .cacheFolder
         preferences.keyBindings = KeyBindingConfiguration(
             lane0: lane0Field.stringValue.lowercased(),
             lane1: lane1Field.stringValue.lowercased(),

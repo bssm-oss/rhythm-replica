@@ -54,6 +54,8 @@ final class PlayerViewController: NSViewController {
 
         playfieldView.applyCardStyle()
         playfieldView.engine = engine
+        playfieldView.setAccessibilityLabel("Gameplay playfield")
+        view.setAccessibilityLabel("Player screen")
         let relinkButton = NSButton(title: "Relink Audio", target: self, action: #selector(openAudio))
 
         let header = NSStackView(views: [openAudioButton, openChartButton, playButton, pauseButton, restartButton, speedDownButton, speedUpButton, speedLabel])
@@ -97,7 +99,9 @@ final class PlayerViewController: NSViewController {
         }
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionChartChange), name: .sessionChartDidChange, object: environment.sessionStore)
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionAudioChange), name: .sessionAudioDidChange, object: environment.sessionStore)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePreferencesChange), name: .preferencesDidChange, object: environment.preferencesStore)
         updateMismatchWarning()
+        handlePreferencesChange()
         startTimer()
     }
 
@@ -138,6 +142,11 @@ final class PlayerViewController: NSViewController {
             do {
                 try self.environment.audioPlaybackService.load(url: url)
                 self.environment.sessionStore.currentAudioURL = url
+                if self.environment.sessionStore.currentChart != .empty {
+                    var chart = self.environment.sessionStore.currentChart
+                    chart.audioFileName = url.lastPathComponent
+                    self.environment.sessionStore.currentChart = chart
+                }
                 self.statusLabel.stringValue = "Audio: \(url.lastPathComponent)"
                 self.environment.recentProjectsStore.add(chartURL: self.environment.sessionStore.currentChartURL, audioURL: url)
                 self.updateMismatchWarning()
@@ -238,6 +247,13 @@ final class PlayerViewController: NSViewController {
         statusLabel.stringValue = "Audio synced: \(url.lastPathComponent)"
     }
 
+    @objc private func handlePreferencesChange() {
+        let preferences = environment.preferencesStore.load()
+        environment.audioPlaybackService.setVolume(preferences.volume)
+        playfieldView.judgementLineRatio = preferences.judgementLineRatio
+        playfieldView.needsDisplay = true
+    }
+
     private func presentResultWindow() {
         environment.audioPlaybackService.pause()
         let resultViewController = ResultViewController(scoreState: engine.scoreState, rank: engine.rank()) { [weak self] in
@@ -271,6 +287,7 @@ final class PlayerViewController: NSViewController {
 
 private final class PlayfieldView: NSView {
     weak var engine: GameEngine?
+    var judgementLineRatio: Double = 0.85
 
     override var acceptsFirstResponder: Bool { true }
 
@@ -288,7 +305,7 @@ private final class PlayfieldView: NSView {
             path.stroke()
         }
 
-        let judgementY = dirtyRect.height * 0.85
+        let judgementY = dirtyRect.height * CGFloat(min(max(judgementLineRatio, 0.1), 0.95))
         RRColor.accentBlue.setStroke()
         let line = NSBezierPath()
         line.move(to: NSPoint(x: 0, y: judgementY))
