@@ -26,6 +26,7 @@
 		75BD2780A2EC6CEBD06C3E68 /* YouTubeImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525CF7D9C39512EB0271F798 /* YouTubeImportService.swift */; };
 		7A5D67ADF5FB6D6DCF2E474D /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663045EB025C51FDD3A84A70 /* MainWindowController.swift */; };
 		8BA4A14CE57C20E34D1BAF2B /* ScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD667C0461E7AB1E190F524 /* ScoreCalculator.swift */; };
+		971417877892707E6CCA346F /* TimelineMiniMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */; };
 		98B232A11FE94698989D608E /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBA6D71B1F687DD8EDF8214 /* DesignTokens.swift */; };
 		9AC8A4CA0AA34FAA97452399 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061CB99548EBB984B9A2E94 /* Chart.swift */; };
 		9CDE302D1E7F921FE36510D4 /* JudgementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F1422DF4CFAE0FE944BCDF /* JudgementEngine.swift */; };
@@ -79,6 +80,7 @@
 		59E877F4A9C329AB7FBA729C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A96C83B5B85B3CB9A3CEFAE /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		663045EB025C51FDD3A84A70 /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMiniMapView.swift; sourceTree = "<group>"; };
 		7351EEE1923C6D467C9AFB88 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		8BBA6D71B1F687DD8EDF8214 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		8BD667C0461E7AB1E190F524 /* ScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCalculator.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				9A889EC19D6B83C7FD03AB1D /* EditorTimelineView.swift */,
+				6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */,
 				CBF0AF1786759347794E5CE6 /* WaveformView.swift */,
 			);
 			path = Views;
@@ -443,6 +446,7 @@
 				1A5805815DB49222DD87FFCA /* SettingsViewController.swift in Sources */,
 				E3B9D025F109B9250C8D7381 /* StartViewController.swift in Sources */,
 				D48EAA71F8004E68D7A52A1C /* TimeFormatting.swift in Sources */,
+				971417877892707E6CCA346F /* TimelineMiniMapView.swift in Sources */,
 				142B3EB4782FE9E50F5D5922 /* TimingConverter.swift in Sources */,
 				BA1113255A34520B95FF662D /* WaveformExtractor.swift in Sources */,
 				65073DA6662DBA35CCDEA72F /* WaveformView.swift in Sources */,
@@ -537,14 +541,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm Replica";
-				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSHandlerRank\": \"Owner\"]]";
+				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"LSHandlerRank\": \"Owner\"]]";
 				INFOPLIST_KEY_LSMinimumSystemVersion = 13.0;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Rhythm Replica uses user-selected helper tools for optional import workflows.";
 				INFOPLIST_KEY_NSHighResolutionCapable = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 BSSM OSS";
 				INFOPLIST_KEY_NSMainNibFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
-				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeConformsTo\": [\"public.json\"], \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]]]]";
+				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]], \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeConformsTo\": [\"public.json\"]]]";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -653,14 +657,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm Replica";
-				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSHandlerRank\": \"Owner\"]]";
+				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"LSHandlerRank\": \"Owner\"]]";
 				INFOPLIST_KEY_LSMinimumSystemVersion = 13.0;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Rhythm Replica uses user-selected helper tools for optional import workflows.";
 				INFOPLIST_KEY_NSHighResolutionCapable = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 BSSM OSS";
 				INFOPLIST_KEY_NSMainNibFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
-				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeConformsTo\": [\"public.json\"], \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]]]]";
+				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]], \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeConformsTo\": [\"public.json\"]]]";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

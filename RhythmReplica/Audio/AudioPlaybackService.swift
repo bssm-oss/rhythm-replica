@@ -33,6 +33,10 @@ final class AudioPlaybackService {
         return min(duration, max(0, rawTime + engine.outputNode.presentationLatency))
     }
 
+    func setVolume(_ value: Double) {
+        engine.mainMixerNode.outputVolume = Float(min(max(value, 0), 1))
+    }
+
     func load(url: URL) throws {
         stop()
         audioFile = try AVAudioFile(forReading: url)

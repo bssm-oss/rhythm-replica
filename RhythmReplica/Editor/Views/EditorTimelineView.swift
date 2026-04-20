@@ -1,9 +1,21 @@
 import AppKit
 
 final class EditorTimelineView: NSView {
+    enum PlacementKind: String, CaseIterable {
+        case normal = "Normal"
+        case specialLeft = "Special Left"
+        case specialRight = "Special Right"
+    }
+
+    private enum DragOperation {
+        case move(ids: Set<UUID>, originalNotes: [UUID: Note], startBeat: Double, startLane: Int)
+        case resizeLong(id: UUID, original: Note)
+    }
+
     var chart: Chart = .empty { didSet { needsDisplay = true } }
     var snapDivisor: Double = 4
     var mode: EditorMode = .normal
+    var placementKind: PlacementKind = .normal
     var playbackBeat: Double = 0 { didSet { needsDisplay = true } }
     var zoomScale: Double = 1.0 { didSet { needsDisplay = true } }
     var selectedNoteIDs: Set<UUID> = [] { didSet { needsDisplay = true } }
@@ -12,6 +24,7 @@ final class EditorTimelineView: NSView {
     var onSeek: ((Double) -> Void)?
     private var selectionStartPoint: NSPoint?
     private var selectionRect: CGRect?
+    private var dragOperation: DragOperation?
 
     override func draw(_ dirtyRect: NSRect) {
         RRColor.elevatedBackground.setFill()
@@ -70,7 +83,8 @@ final class EditorTimelineView: NSView {
         onChartWillChange?(chart)
         switch mode {
         case .normal:
-            chart.notes.append(Note(beat: beat, lane: lane, type: .normal))
+            let note = Note(beat: beat, lane: lane, type: noteType(for: placementKind, lane: lane))
+            chart.notes.append(note)
             selectedNoteIDs = [chart.notes.last!.id]
         case .long:
             chart.notes.append(Note(beat: beat, lane: lane, type: .long, durationBeats: 1))
@@ -85,8 +99,18 @@ final class EditorTimelineView: NSView {
                 if let id = chart.notes.first(where: { hitTest(note: $0, beat: beat, lane: lane) })?.id {
                     selectedNoteIDs = [id]
                 }
-            } else if let id = chart.notes.first(where: { hitTest(note: $0, beat: beat, lane: lane) })?.id {
-                selectedNoteIDs = [id]
+            } else if let note = chart.notes.first(where: { hitTest(note: $0, beat: beat, lane: lane) }) {
+                selectedNoteIDs = [note.id]
+                let laneWidth = bounds.width / 4
+                let beatsPerScreen = max(4, chart.totalBeats / zoomScale)
+                let pixelsPerBeat = bounds.height / CGFloat(beatsPerScreen)
+                let noteRect = rect(for: note, laneWidth: laneWidth, pixelsPerBeat: pixelsPerBeat, in: bounds)
+                let originals = Dictionary(uniqueKeysWithValues: chart.notes.filter { selectedNoteIDs.contains($0.id) }.map { ($0.id, $0) })
+                if note.type == .long && abs(point.y - noteRect.minY) < 12 {
+                    dragOperation = .resizeLong(id: note.id, original: note)
+                } else {
+                    dragOperation = .move(ids: selectedNoteIDs, originalNotes: originals, startBeat: beat, startLane: lane)
+                }
             }
         }
 
@@ -96,10 +120,41 @@ final class EditorTimelineView: NSView {
     }
 
     override func mouseDragged(with event: NSEvent) {
-        guard mode == .select, let start = selectionStartPoint else { return }
         let point = convert(event.locationInWindow, from: nil)
-        selectionRect = CGRect(x: min(start.x, point.x), y: min(start.y, point.y), width: abs(point.x - start.x), height: abs(point.y - start.y))
-        updateSelectionFromRect()
+        if mode == .select, let start = selectionStartPoint {
+            selectionRect = CGRect(x: min(start.x, point.x), y: min(start.y, point.y), width: abs(point.x - start.x), height: abs(point.y - start.y))
+            updateSelectionFromRect()
+            return
+        }
+
+        guard mode == .edit, let dragOperation else { return }
+        let laneWidth = bounds.width / 4
+        let lane = max(0, min(3, Int(point.x / laneWidth)))
+        let beat = snappedBeat(for: point.y)
+        let step = 1 / snapDivisor
+
+        switch dragOperation {
+        case .move(let ids, let originalNotes, let startBeat, let startLane):
+            let laneDelta = lane - startLane
+            let beatDelta = beat - startBeat
+            chart.notes = chart.notes.map { note in
+                guard ids.contains(note.id), let original = originalNotes[note.id] else { return note }
+                var edited = original
+                edited.lane = min(max(0, original.lane + laneDelta), 3)
+                edited.beat = min(max(0, original.beat + beatDelta), chart.totalBeats)
+                return edited
+            }
+        case .resizeLong(let id, let original):
+            chart.notes = chart.notes.map { note in
+                guard note.id == id else { return note }
+                var edited = original
+                edited.durationBeats = max(step, min(chart.totalBeats - original.beat, beat - original.beat))
+                return edited
+            }
+        }
+        chart.notes.sort { $0.beat < $1.beat }
+        onChartChanged?(chart)
+        needsDisplay = true
     }
 
     override func mouseUp(with event: NSEvent) {
@@ -109,6 +164,7 @@ final class EditorTimelineView: NSView {
             selectionRect = nil
             needsDisplay = true
         }
+        dragOperation = nil
     }
 
     func selectAllNotes() {
@@ -150,7 +206,7 @@ final class EditorTimelineView: NSView {
         onChartWillChange?(chart)
         switch mode {
         case .normal:
-            let note = Note(beat: beat, lane: lane, type: .normal)
+            let note = Note(beat: beat, lane: lane, type: noteType(for: placementKind, lane: lane))
             chart.notes.append(note)
             selectedNoteIDs = [note.id]
         case .long:
@@ -197,6 +253,17 @@ final class EditorTimelineView: NSView {
         case .normal: return RRColor.noteNormal
         case .long: return RRColor.noteLong
         case .specialLeft, .specialRight: return RRColor.noteSpecial
+        }
+    }
+
+    private func noteType(for placementKind: PlacementKind, lane: Int) -> NoteType {
+        switch placementKind {
+        case .normal:
+            return .normal
+        case .specialLeft:
+            return .specialLeft
+        case .specialRight:
+            return .specialRight
         }
     }
 }

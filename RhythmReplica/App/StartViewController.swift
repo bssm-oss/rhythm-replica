@@ -4,6 +4,9 @@ final class StartViewController: NSViewController, NSDraggingDestination {
     private let environment: AppEnvironment
     private let recentList = NSTextView(frame: .zero)
     private let toolStatusLabel = NSTextField(labelWithString: "")
+    private let recentPopup = NSPopUpButton(frame: .zero, pullsDown: false)
+    private let reopenRecentButton = NSButton(title: "최근 프로젝트 다시 열기", target: nil, action: nil)
+    private var youtubeWindowController: NSWindowController?
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -38,6 +41,8 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         let importButton = NSButton(title: "로컬 오디오 가져오기", target: self, action: #selector(importAudio))
         let youtubeButton = NSButton(title: "YouTube 링크 가져오기", target: self, action: #selector(showYouTubeStatus))
         let onboardingButton = NSButton(title: "첫 실행 안내", target: self, action: #selector(showOnboarding))
+        reopenRecentButton.target = self
+        reopenRecentButton.action = #selector(reopenRecentProject)
 
         let recentContainer = NSScrollView()
         recentContainer.documentView = recentList
@@ -52,7 +57,11 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         toolStatusLabel.font = RRTypography.body()
         refreshRecentItems()
 
-        let stack = NSStackView(views: [titleLabel, descriptionLabel, newPlayButton, editorButton, importButton, youtubeButton, onboardingButton, toolStatusLabel, recentContainer])
+        let recentControls = NSStackView(views: [recentPopup, reopenRecentButton])
+        recentControls.orientation = .horizontal
+        recentControls.spacing = 8
+
+        let stack = NSStackView(views: [titleLabel, descriptionLabel, newPlayButton, editorButton, importButton, youtubeButton, onboardingButton, recentControls, toolStatusLabel, recentContainer])
         stack.orientation = .vertical
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -75,23 +84,38 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         guard let files = sender.draggingPasteboard.readObjects(forClasses: [NSURL.self]) as? [URL], !files.isEmpty else {
             return false
         }
-        toolStatusLabel.stringValue = "드롭된 파일: \(files.map(\.lastPathComponent).joined(separator: ", "))"
+        for file in files {
+            handleImportedFile(file)
+        }
+        toolStatusLabel.stringValue = "드롭된 파일을 로드했습니다: \(files.map(\.lastPathComponent).joined(separator: ", "))"
         return true
     }
 
     private func refreshRecentItems() {
         let items = environment.recentProjectsStore.load()
+        recentPopup.removeAllItems()
+        if items.isEmpty {
+            recentPopup.addItem(withTitle: "최근 프로젝트 없음")
+            recentPopup.isEnabled = false
+            reopenRecentButton.isEnabled = false
+        } else {
+            recentPopup.isEnabled = true
+            reopenRecentButton.isEnabled = true
+            recentPopup.addItems(withTitles: items.map { "\(URL(fileURLWithPath: $0.chartPath).lastPathComponent) · \(URL(fileURLWithPath: $0.audioPath).lastPathComponent)" })
+        }
         recentList.string = items.isEmpty
             ? "최근 프로젝트가 없습니다. 플레이어나 에디터에서 오디오와 채보를 연 뒤 다시 여기로 돌아오면 최근 목록이 표시됩니다."
             : items.map { "• \($0.chartPath)\n  ↳ \($0.audioPath)" }.joined(separator: "\n")
     }
 
     @objc private func openPlayerHint() {
-        toolStatusLabel.stringValue = "Player 탭에서 오디오와 채보를 열어 바로 플레이할 수 있습니다."
+        NotificationCenter.default.post(name: .navigateToTab, object: self, userInfo: ["tab": "Player"])
+        toolStatusLabel.stringValue = "Player 탭으로 이동했습니다."
     }
 
     @objc private func openEditorHint() {
-        toolStatusLabel.stringValue = "Editor 탭에서 BPM, 스냅, 노트 배치를 수정한 뒤 바로 테스트 플레이할 수 있습니다."
+        NotificationCenter.default.post(name: .navigateToTab, object: self, userInfo: ["tab": "Editor"])
+        toolStatusLabel.stringValue = "Editor 탭으로 이동했습니다."
     }
 
     @objc private func importAudio() {
@@ -100,6 +124,24 @@ final class StartViewController: NSViewController, NSDraggingDestination {
             guard response == .OK, let url = panel.url else { return }
             self?.environment.sessionStore.currentAudioURL = url
             self?.toolStatusLabel.stringValue = "오디오 선택됨: \(url.lastPathComponent)"
+            self?.refreshRecentItems()
+        }
+    }
+
+    @objc private func reopenRecentProject() {
+        let items = environment.recentProjectsStore.load()
+        guard recentPopup.indexOfSelectedItem >= 0, recentPopup.indexOfSelectedItem < items.count else { return }
+        let item = items[recentPopup.indexOfSelectedItem]
+        let audioURL = URL(fileURLWithPath: item.audioPath)
+        let chartURL = URL(fileURLWithPath: item.chartPath)
+        environment.sessionStore.currentAudioURL = audioURL
+        if let chart = try? environment.chartLoader.load(from: chartURL) {
+            environment.sessionStore.currentChart = chart
+            environment.sessionStore.currentChartURL = chartURL
+            toolStatusLabel.stringValue = "최근 프로젝트를 다시 열었습니다: \(chartURL.lastPathComponent)"
+            NotificationCenter.default.post(name: .navigateToTab, object: self, userInfo: ["tab": "Player"])
+        } else {
+            toolStatusLabel.stringValue = "최근 프로젝트를 불러오지 못했습니다. 파일이 이동되었을 수 있습니다."
         }
     }
 
@@ -110,6 +152,7 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         window.styleMask = [.titled, .closable]
         let host = NSWindowController(window: window)
         host.showWindow(nil)
+        youtubeWindowController = host
         toolStatusLabel.stringValue = "YouTube 가져오기 창을 열었습니다. 권리가 있는 영상만 사용하세요."
     }
 
@@ -120,5 +163,19 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         alert.informativeText = message
         alert.addButton(withTitle: "확인")
         alert.beginSheetModal(for: view.window!) { _ in }
+    }
+
+    private func handleImportedFile(_ url: URL) {
+        switch url.pathExtension.lowercased() {
+        case "json":
+            if let chart = try? environment.chartLoader.load(from: url) {
+                environment.sessionStore.currentChart = chart
+                environment.sessionStore.currentChartURL = url
+            }
+        case "mp3", "m4a", "wav", "aac", "flac":
+            environment.sessionStore.currentAudioURL = url
+        default:
+            break
+        }
     }
 }

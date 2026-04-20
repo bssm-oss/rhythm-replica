@@ -1,5 +1,10 @@
 import Foundation
 
+extension Notification.Name {
+    static let preferencesDidChange = Notification.Name("RhythmReplica.preferencesDidChange")
+    static let navigateToTab = Notification.Name("RhythmReplica.navigateToTab")
+}
+
 enum ThemePreference: String, Codable, CaseIterable {
     case system
     case dark
@@ -40,6 +45,7 @@ final class PreferencesStore {
     func save(_ preferences: Preferences) {
         if let data = try? JSONEncoder().encode(preferences) {
             defaults.set(data, forKey: key)
+            NotificationCenter.default.post(name: .preferencesDidChange, object: self)
         }
     }
 }

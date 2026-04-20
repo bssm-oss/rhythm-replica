@@ -10,13 +10,15 @@ final class YouTubeImportTask {
     private let process: Process
     private let outputPipe: Pipe
     private let errorPipe: Pipe
+    private let outputDirectory: URL
     var onProgress: ((String) -> Void)?
     var onCompletion: ((Result<URL, Error>) -> Void)?
 
-    init(process: Process, outputPipe: Pipe, errorPipe: Pipe) {
+    init(process: Process, outputPipe: Pipe, errorPipe: Pipe, outputDirectory: URL) {
         self.process = process
         self.outputPipe = outputPipe
         self.errorPipe = errorPipe
+        self.outputDirectory = outputDirectory
     }
 
     func start() throws {
@@ -34,8 +36,8 @@ final class YouTubeImportTask {
             let errorText = String(data: errorData, encoding: .utf8) ?? ""
             DispatchQueue.main.async {
                 if process.terminationStatus == 0,
-                   let destination = process.arguments?.dropLast().last {
-                    self.onCompletion?(.success(URL(fileURLWithPath: destination)))
+                   let destination = self.latestImportedFile() {
+                    self.onCompletion?(.success(destination))
                 } else {
                     let message = errorText.isEmpty ? "YouTube 가져오기에 실패했습니다." : errorText
                     self.onCompletion?(.failure(NSError(domain: "YouTubeImportTask", code: Int(process.terminationStatus), userInfo: [NSLocalizedDescriptionKey: message])))
@@ -50,6 +52,18 @@ final class YouTubeImportTask {
         if process.isRunning {
             process.terminate()
         }
+    }
+
+    private func latestImportedFile() -> URL? {
+        let candidates = (try? FileManager.default.contentsOfDirectory(at: outputDirectory, includingPropertiesForKeys: [.contentModificationDateKey], options: [.skipsHiddenFiles])) ?? []
+        return candidates
+            .filter { ["m4a", "aac", "mp3", "wav", "flac"].contains($0.pathExtension.lowercased()) }
+            .sorted {
+                let lhs = (try? $0.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+                let rhs = (try? $1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+                return lhs > rhs
+            }
+            .first
     }
 }
 
@@ -115,13 +129,12 @@ final class YouTubeImportService {
             "--audio-format", "m4a",
             "--audio-quality", "0",
             "-o", outputTemplate,
-            url,
-            outputDirectory.path
+            url
         ]
         let outputPipe = Pipe()
         let errorPipe = Pipe()
         process.standardOutput = outputPipe
         process.standardError = errorPipe
-        return YouTubeImportTask(process: process, outputPipe: outputPipe, errorPipe: errorPipe)
+        return YouTubeImportTask(process: process, outputPipe: outputPipe, errorPipe: errorPipe, outputDirectory: outputDirectory)
     }
 }
