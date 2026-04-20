@@ -24,7 +24,7 @@ Secrets가 없으면 unsigned local build만 수행합니다.
 
 ## 서명 / 공증 동작
 
-- GitHub Actions `release.yml`은 시크릿이 모두 있는 경우에만 Developer ID 인증서 import, codesign, notarization, stapling 단계를 실행합니다.
+- GitHub Actions `tag-release.yml`은 시크릿이 모두 있는 경우에만 Developer ID 인증서 import, codesign, notarization, stapling 단계를 실행합니다.
 - 시크릿이 없으면 unsigned `.app` / `.dmg`를 계속 생성합니다.
 
 ## Homebrew Cask 갱신

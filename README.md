@@ -149,7 +149,7 @@ Rhythm Replica는 DRM 우회, 로그인 우회, 유료 콘텐츠 우회, 지역 
 ## CI 개요
 
 - `ci.yml`: 빌드 + 테스트
-- `release.yml`: 태그 푸시 시 앱 빌드, DMG 패키징, 체크섬, GitHub Release 업로드
+- `tag-release.yml`: 태그 푸시 시 앱 빌드, DMG 패키징, 체크섬, GitHub Release 업로드
 
 ## 알려진 제한 사항
 
