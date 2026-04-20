@@ -61,7 +61,7 @@ brew tap bssm-oss/tap
 brew install --cask rhythm-replica
 ```
 
-> 릴리즈가 생성되면 `./scripts/update-cask.sh <version> <sha256>`로 Cask의 버전과 SHA256을 갱신합니다.
+> 새 릴리즈를 만들면 `./scripts/update-cask.sh <version> <sha256>`로 Cask의 버전과 SHA256을 갱신합니다.
 
 ## 로컬 개발 시작
 
@@ -175,4 +175,4 @@ Rhythm Replica는 DRM 우회, 로그인 우회, 유료 콘텐츠 우회, 지역 
 
 ## 라이선스
 
-현재 저장소에는 MIT 라이선스 초안을 포함했습니다. 조직 정책 확정 전까지는 최종 라이선스 결정이 필요합니다.
+현재 저장소는 MIT 라이선스를 사용합니다.
