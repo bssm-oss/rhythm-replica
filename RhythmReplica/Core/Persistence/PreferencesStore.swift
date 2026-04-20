@@ -27,6 +27,9 @@ struct Preferences: Codable, Equatable {
     var inputDelayMilliseconds: Double = 0
     var defaultSpeed: Double = 2.0
     var judgementLineRatio: Double = 0.85
+    var perfectWindowMilliseconds: Double = 60
+    var goodWindowMilliseconds: Double = 120
+    var badWindowMilliseconds: Double = 180
     var volume: Double = 1.0
     var theme: ThemePreference = .system
     var outputDeviceName: String = "System Default"
