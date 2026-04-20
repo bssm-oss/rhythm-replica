@@ -21,8 +21,11 @@ jobs:
       - name: Build release app
         run: ./scripts/build-release.sh
       - name: Import signing certificate
-        if: ${{ secrets.CERTIFICATE_P12 != '' && secrets.CERTIFICATE_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
+          if [ -z "$CERTIFICATE_P12" ] || [ -z "$CERTIFICATE_PASSWORD" ] || [ -z "$DEVELOPER_ID_APPLICATION" ]; then
+            echo "Signing secrets not configured; skipping certificate import."
+            exit 0
+          fi
           echo "$CERTIFICATE_P12" | base64 --decode > build/certificate.p12
           security create-keychain -p runner build.keychain
           security default-keychain -s build.keychain
@@ -32,17 +35,26 @@ jobs:
         env:
           CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
       - name: Sign app bundle
-        if: ${{ secrets.CERTIFICATE_P12 != '' && secrets.CERTIFICATE_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
+          if [ -z "$CERTIFICATE_P12" ] || [ -z "$CERTIFICATE_PASSWORD" ] || [ -z "$DEVELOPER_ID_APPLICATION" ]; then
+            echo "Signing secrets not configured; skipping codesign."
+            exit 0
+          fi
           codesign --force --deep --options runtime --sign "$DEVELOPER_ID_APPLICATION" "build/Products/Rhythm Replica.app"
         env:
+          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
       - name: Package DMG
         run: ./scripts/package-dmg.sh
       - name: Notarize app bundle
-        if: ${{ secrets.APPLE_ID != '' && secrets.APPLE_TEAM_ID != '' && secrets.APP_SPECIFIC_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
+          if [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ] || [ -z "$DEVELOPER_ID_APPLICATION" ] || [ -z "$CERTIFICATE_P12" ] || [ -z "$CERTIFICATE_PASSWORD" ]; then
+            echo "Notarization secrets not fully configured; skipping notarization."
+            exit 0
+          fi
           xcrun notarytool submit "build/RhythmReplica.dmg" --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APP_SPECIFIC_PASSWORD" --wait
           xcrun stapler staple "build/Products/Rhythm Replica.app"
           xcrun stapler staple "build/RhythmReplica.dmg"
@@ -50,6 +62,9 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       - name: SHA256
         run: ./scripts/sha256.sh build/RhythmReplica.dmg > build/RhythmReplica.dmg.sha256
       - name: Create release
