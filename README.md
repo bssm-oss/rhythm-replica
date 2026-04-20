@@ -98,6 +98,8 @@ xcodebuild -project RhythmReplica.xcodeproj -scheme RhythmReplica -destination '
 swift run RhythmReplicaSelfCheck
 ```
 
+> 현재 이 로컬 Command Line Tools 환경에서는 SwiftPM test target에 필요한 Apple test framework(`XCTest`/`Testing`) 노출이 없어 `swift test`를 신뢰 가능한 기본 경로로 사용하지 않습니다. 번들 테스트는 full Xcode 환경의 `xcodebuild ... test` 또는 GitHub Actions CI를 기준으로 봅니다.
+
 ## 폴더 구조
 
 ```text
