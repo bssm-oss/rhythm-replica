@@ -28,6 +28,7 @@ Secrets가 없으면 unsigned local build만 수행합니다.
 
 - GitHub Actions `tag-release.yml`은 시크릿이 모두 있는 경우에만 Developer ID 인증서 import, codesign, notarization, stapling 단계를 실행합니다.
 - 시크릿이 없으면 unsigned `.app` / `.dmg`를 계속 생성합니다.
+- Homebrew Cask는 설치 후 quarantine 속성을 제거하도록 구성되어 있어 unsigned 릴리즈에서도 설치 직후 실행을 돕습니다.
 
 ## Homebrew Cask 갱신
 
