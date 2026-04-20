@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: macos-13
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Build release app
+        run: ./scripts/build-release.sh
+      - name: Package DMG
+        run: ./scripts/package-dmg.sh
+      - name: SHA256
+        run: ./scripts/sha256.sh build/RhythmReplica.dmg > build/RhythmReplica.dmg.sha256
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/RhythmReplica.dmg
+            build/RhythmReplica.dmg.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

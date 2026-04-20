@@ -1,0 +1,3 @@
+import RhythmReplicaKit
+
+RhythmReplicaAppMain.run()

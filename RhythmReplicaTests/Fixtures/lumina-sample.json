@@ -1,0 +1,6 @@
+[
+  { "type": "normal", "lane": 0, "time": 1.0 },
+  { "type": "long", "lane": 1, "time": 2.0, "endTime": 3.0 },
+  { "type": "special", "dir": "left", "time": 4.0 },
+  { "type": "special", "dir": "right", "time": 5.0 }
+]
