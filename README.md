@@ -85,6 +85,8 @@ swift run RhythmReplicaSelfCheck
 swift run RhythmReplica
 ```
 
+릴리즈 패키징도 full Xcode가 없으면 SwiftPM release binary를 `.app` 번들로 감싸는 fallback 경로를 사용합니다.
+
 ## 테스트 실행
 
 ```bash
@@ -162,14 +164,13 @@ Rhythm Replica는 DRM 우회, 로그인 우회, 유료 콘텐츠 우회, 지역 
 - 현재 자동 검증은 SwiftPM self-check와 런치 스모크를 기준으로 수행했습니다. Xcode 테스트 번들은 전체 Xcode 앱이 있는 환경에서 추가 확인이 필요합니다.
 - LUMINA 시간 기반 가져오기는 현재 절대 시간을 보존하기 위해 `bpm = 60` 어댑터를 사용합니다. 이 부분은 후속 버전에서 더 정교한 변환기로 확장될 수 있습니다.
 - 오디오 출력 장치 선택은 현재 AVAudioEngine 기반 경로에서 시스템 기본 장치만 사용합니다.
-- GitHub Release / DMG / Homebrew SHA는 실제 태그 릴리즈가 끝나기 전까지 최종 확정되지 않습니다.
 
 ## 로드맵
 
 - [x] 기본 앱/문서/프로젝트 구조
 - [x] 채보 모델, 검증기, 테스트
-- [ ] 릴리즈 서명 / 공증 / DMG 실환경 검증
-- [ ] Homebrew Cask SHA를 실제 릴리즈 아티팩트로 갱신
+- [x] DMG 생성 / GitHub Release / Homebrew Cask SHA 반영
+- [ ] 릴리즈 서명 / 공증 실환경 검증
 - [ ] LUMINA 변환 어댑터 정교화
 
 ## 라이선스
