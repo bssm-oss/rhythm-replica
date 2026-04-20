@@ -1,0 +1,13 @@
+name: Feature Request
+description: Suggest an improvement for Rhythm Replica
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or goal
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution

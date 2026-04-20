@@ -1,0 +1,710 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		043B7FB51B1B1CAB6091D28D /* sample-chart.rrchart.json in Resources */ = {isa = PBXBuildFile; fileRef = 2A5A44E5AACB31C0F74F1700 /* sample-chart.rrchart.json */; };
+		07342DB14BEE82708F62FB6D /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF16D3AFCA19EDDFE1BD1342 /* EditorViewController.swift */; };
+		11CBBA94FFC5F9C9351EF2C0 /* ChartExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57AF2E791CD7ED8D1B59FC2 /* ChartExporter.swift */; };
+		1367004E8C096C2FFD1F4409 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02663D25B92528C61D99E61D /* AppEnvironment.swift */; };
+		142B3EB4782FE9E50F5D5922 /* TimingConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173DE43551E716C8F5B8F667 /* TimingConverter.swift */; };
+		1A5805815DB49222DD87FFCA /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3844E4CF04887CC1E95AD01B /* SettingsViewController.swift */; };
+		1B1E36ECE3B3FE06CFA17A69 /* EditorTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A889EC19D6B83C7FD03AB1D /* EditorTimelineView.swift */; };
+		23DCF15C67923140D7FDDB8C /* ExternalToolDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC310F6AB0163C27C1B72CC /* ExternalToolDetector.swift */; };
+		4E9A009BE513DA268A31183A /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F214C173B4B1F9173FE855 /* PlayerViewController.swift */; };
+		526FE9FD4D1BA81D8BD7DA9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E877F4A9C329AB7FBA729C /* AppDelegate.swift */; };
+		56DF42EE6C08D7B27990984C /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7351EEE1923C6D467C9AFB88 /* CacheManager.swift */; };
+		5851D9E1E424DD8DA9A59F5F /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B500678E8B199B1845EDE74F /* PreferencesStore.swift */; };
+		5B0B7AFAE3F7169AE2158AEC /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531B1393871D174D8D0F6CD /* GameEngine.swift */; };
+		61F0EE23BF4CABF079564E57 /* AppMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F8A951531492B37DDCD4FB /* AppMain.swift */; };
+		65073DA6662DBA35CCDEA72F /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF0AF1786759347794E5CE6 /* WaveformView.swift */; };
+		70CDA9C526FB245041F925B7 /* ChartLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5913DD5340F2BED307EBFD9A /* ChartLoader.swift */; };
+		75BD2780A2EC6CEBD06C3E68 /* YouTubeImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525CF7D9C39512EB0271F798 /* YouTubeImportService.swift */; };
+		7A5D67ADF5FB6D6DCF2E474D /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663045EB025C51FDD3A84A70 /* MainWindowController.swift */; };
+		8BA4A14CE57C20E34D1BAF2B /* ScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD667C0461E7AB1E190F524 /* ScoreCalculator.swift */; };
+		971417877892707E6CCA346F /* TimelineMiniMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */; };
+		98B232A11FE94698989D608E /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBA6D71B1F687DD8EDF8214 /* DesignTokens.swift */; };
+		9AC8A4CA0AA34FAA97452399 /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061CB99548EBB984B9A2E94 /* Chart.swift */; };
+		9CDE302D1E7F921FE36510D4 /* JudgementEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F1422DF4CFAE0FE944BCDF /* JudgementEngine.swift */; };
+		A903A5C099500C74ED310BFA /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B04469C78CE491922C0609 /* ResultViewController.swift */; };
+		BA1113255A34520B95FF662D /* WaveformExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512A7EF8797DA44295CBBF66 /* WaveformExtractor.swift */; };
+		C156C07B02429549254E5CBA /* YouTubeImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A4924BEE07314EA0940FCD /* YouTubeImportViewController.swift */; };
+		C89F3F2EEBDF4816731DFB0F /* CoreLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E4F4C372068E2526BCE3C /* CoreLogicTests.swift */; };
+		CF6552D8F9380E2F6D153470 /* EditorMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B554122CE2FF2DD4984A2B30 /* EditorMode.swift */; };
+		D0DD72D7BBBFB614EFDFA411 /* ChartValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9B4444FFF65DBAFB7DFCE9 /* ChartValidator.swift */; };
+		D48EAA71F8004E68D7A52A1C /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1AA38F6A569258408264BE /* TimeFormatting.swift */; };
+		D72E5A1FFE047D84D3FA1212 /* AudioPlaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64FFD4639C5FD93774319DE /* AudioPlaybackService.swift */; };
+		DEF72DAD43A359671B9E5C92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F539E255738B5646D869F /* main.swift */; };
+		E3B9D025F109B9250C8D7381 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1011BECCF91E02E440409 /* StartViewController.swift */; };
+		E622252904060E6998B04512 /* NoteRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D68C3BE2E70AEABF2CAE534 /* NoteRenderer.swift */; };
+		EA562A2BF3BC4D771D1D249E /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96C83B5B85B3CB9A3CEFAE /* InputManager.swift */; };
+		EC0EF459BD410BA91212B570 /* RecentProjectsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F041000FC7EC721154185FF /* RecentProjectsStore.swift */; };
+		F354C0EFBF38321DF58C8876 /* KeyBindingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E394678000F1BEBFF7283DD /* KeyBindingManager.swift */; };
+		F851FC76A5EF54487A13DB21 /* lumina-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = A112E2F68C01A92B6678C3FF /* lumina-sample.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		90447417E91B1A430C52CB56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1D9D01443916FDDFBB507D2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 636B0F69BA6B7C064B0A7171;
+			remoteInfo = RhythmReplica;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02663D25B92528C61D99E61D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		03A4924BEE07314EA0940FCD /* YouTubeImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeImportViewController.swift; sourceTree = "<group>"; };
+		12760FB59EDA7B556E56B7D4 /* RhythmReplicaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhythmReplicaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		167E4F4C372068E2526BCE3C /* CoreLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLogicTests.swift; sourceTree = "<group>"; };
+		173DE43551E716C8F5B8F667 /* TimingConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimingConverter.swift; sourceTree = "<group>"; };
+		1F041000FC7EC721154185FF /* RecentProjectsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentProjectsStore.swift; sourceTree = "<group>"; };
+		21B04469C78CE491922C0609 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		25F214C173B4B1F9173FE855 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		2A5A44E5AACB31C0F74F1700 /* sample-chart.rrchart.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "sample-chart.rrchart.json"; sourceTree = "<group>"; };
+		2E394678000F1BEBFF7283DD /* KeyBindingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBindingManager.swift; sourceTree = "<group>"; };
+		3844E4CF04887CC1E95AD01B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		3B1AA38F6A569258408264BE /* TimeFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatting.swift; sourceTree = "<group>"; };
+		3C188F92505E65DC2D480046 /* RhythmReplica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhythmReplica.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FA1011BECCF91E02E440409 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		4D68C3BE2E70AEABF2CAE534 /* NoteRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRenderer.swift; sourceTree = "<group>"; };
+		509F539E255738B5646D869F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		512A7EF8797DA44295CBBF66 /* WaveformExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformExtractor.swift; sourceTree = "<group>"; };
+		525CF7D9C39512EB0271F798 /* YouTubeImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeImportService.swift; sourceTree = "<group>"; };
+		5913DD5340F2BED307EBFD9A /* ChartLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartLoader.swift; sourceTree = "<group>"; };
+		59E877F4A9C329AB7FBA729C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5A96C83B5B85B3CB9A3CEFAE /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
+		663045EB025C51FDD3A84A70 /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMiniMapView.swift; sourceTree = "<group>"; };
+		7351EEE1923C6D467C9AFB88 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		8BBA6D71B1F687DD8EDF8214 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		8BD667C0461E7AB1E190F524 /* ScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCalculator.swift; sourceTree = "<group>"; };
+		9A889EC19D6B83C7FD03AB1D /* EditorTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTimelineView.swift; sourceTree = "<group>"; };
+		A112E2F68C01A92B6678C3FF /* lumina-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "lumina-sample.json"; sourceTree = "<group>"; };
+		A531B1393871D174D8D0F6CD /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
+		B1F8A951531492B37DDCD4FB /* AppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
+		B500678E8B199B1845EDE74F /* PreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesStore.swift; sourceTree = "<group>"; };
+		B554122CE2FF2DD4984A2B30 /* EditorMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMode.swift; sourceTree = "<group>"; };
+		B64FFD4639C5FD93774319DE /* AudioPlaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackService.swift; sourceTree = "<group>"; };
+		BEC310F6AB0163C27C1B72CC /* ExternalToolDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalToolDetector.swift; sourceTree = "<group>"; };
+		CBF0AF1786759347794E5CE6 /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
+		D061CB99548EBB984B9A2E94 /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
+		D57AF2E791CD7ED8D1B59FC2 /* ChartExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartExporter.swift; sourceTree = "<group>"; };
+		DF16D3AFCA19EDDFE1BD1342 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
+		F4F1422DF4CFAE0FE944BCDF /* JudgementEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JudgementEngine.swift; sourceTree = "<group>"; };
+		FD9B4444FFF65DBAFB7DFCE9 /* ChartValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartValidator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		068002019CE6183A8CD90084 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				B554122CE2FF2DD4984A2B30 /* EditorMode.swift */,
+				DF16D3AFCA19EDDFE1BD1342 /* EditorViewController.swift */,
+				81DE1865FB41BB51B86BE834 /* Views */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		0E6A3BF1E4BFA75605FC909C /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				53E630F48354161C71CF7734 /* ChartFormat */,
+				A262095AE771C089A961F15E /* Models */,
+				B3434BD00EF57E84F3B1D95F /* Persistence */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		1A559465DC6D1ED73FA51C64 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				A531B1393871D174D8D0F6CD /* GameEngine.swift */,
+				5A96C83B5B85B3CB9A3CEFAE /* InputManager.swift */,
+				F4F1422DF4CFAE0FE944BCDF /* JudgementEngine.swift */,
+				8BD667C0461E7AB1E190F524 /* ScoreCalculator.swift */,
+				704DB7F7EFA1DE88464C7DF0 /* Views */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		291269304A4D0ACF982C6055 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2E394678000F1BEBFF7283DD /* KeyBindingManager.swift */,
+				3844E4CF04887CC1E95AD01B /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		32F40DFE3CB0EE2271F82DF5 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				BEC310F6AB0163C27C1B72CC /* ExternalToolDetector.swift */,
+				525CF7D9C39512EB0271F798 /* YouTubeImportService.swift */,
+				03A4924BEE07314EA0940FCD /* YouTubeImportViewController.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		4844D7A8D7FA5982D9A1563F /* SampleCharts */ = {
+			isa = PBXGroup;
+			children = (
+				2A5A44E5AACB31C0F74F1700 /* sample-chart.rrchart.json */,
+			);
+			path = SampleCharts;
+			sourceTree = "<group>";
+		};
+		53E630F48354161C71CF7734 /* ChartFormat */ = {
+			isa = PBXGroup;
+			children = (
+				D57AF2E791CD7ED8D1B59FC2 /* ChartExporter.swift */,
+				5913DD5340F2BED307EBFD9A /* ChartLoader.swift */,
+				FD9B4444FFF65DBAFB7DFCE9 /* ChartValidator.swift */,
+				173DE43551E716C8F5B8F667 /* TimingConverter.swift */,
+			);
+			path = ChartFormat;
+			sourceTree = "<group>";
+		};
+		704DB7F7EFA1DE88464C7DF0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4D68C3BE2E70AEABF2CAE534 /* NoteRenderer.swift */,
+				25F214C173B4B1F9173FE855 /* PlayerViewController.swift */,
+				21B04469C78CE491922C0609 /* ResultViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		73AB5A78F3E42C2CB029A0D3 /* RhythmReplica */ = {
+			isa = PBXGroup;
+			children = (
+				CCCBC39FD6429C2DE8C58FFB /* App */,
+				D2CB9467B19A8704D0FE2F84 /* Audio */,
+				0E6A3BF1E4BFA75605FC909C /* Core */,
+				87555764530019134DCC2DEC /* DesignSystem */,
+				068002019CE6183A8CD90084 /* Editor */,
+				1A559465DC6D1ED73FA51C64 /* Game */,
+				32F40DFE3CB0EE2271F82DF5 /* Import */,
+				F8D6011E3ADADFE11E776FC5 /* Resources */,
+				291269304A4D0ACF982C6055 /* Settings */,
+				FC480E6B830A9154D792E129 /* Utils */,
+			);
+			path = RhythmReplica;
+			sourceTree = "<group>";
+		};
+		81DE1865FB41BB51B86BE834 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A889EC19D6B83C7FD03AB1D /* EditorTimelineView.swift */,
+				6A53E55795BDBE1A11C9F831 /* TimelineMiniMapView.swift */,
+				CBF0AF1786759347794E5CE6 /* WaveformView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		87555764530019134DCC2DEC /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				8BBA6D71B1F687DD8EDF8214 /* DesignTokens.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		A19EDE1B94C0542885FC8179 /* RhythmReplicaTests */ = {
+			isa = PBXGroup;
+			children = (
+				167E4F4C372068E2526BCE3C /* CoreLogicTests.swift */,
+				CA17FF11E3C033F458AC6A0C /* Fixtures */,
+			);
+			path = RhythmReplicaTests;
+			sourceTree = "<group>";
+		};
+		A262095AE771C089A961F15E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D061CB99548EBB984B9A2E94 /* Chart.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B3434BD00EF57E84F3B1D95F /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				7351EEE1923C6D467C9AFB88 /* CacheManager.swift */,
+				B500678E8B199B1845EDE74F /* PreferencesStore.swift */,
+				1F041000FC7EC721154185FF /* RecentProjectsStore.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		BD382353F4351C42951EE2A9 = {
+			isa = PBXGroup;
+			children = (
+				73AB5A78F3E42C2CB029A0D3 /* RhythmReplica */,
+				A19EDE1B94C0542885FC8179 /* RhythmReplicaTests */,
+				F4DD72C7F019817BE6133EC3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CA17FF11E3C033F458AC6A0C /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				A112E2F68C01A92B6678C3FF /* lumina-sample.json */,
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		CCCBC39FD6429C2DE8C58FFB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				59E877F4A9C329AB7FBA729C /* AppDelegate.swift */,
+				02663D25B92528C61D99E61D /* AppEnvironment.swift */,
+				B1F8A951531492B37DDCD4FB /* AppMain.swift */,
+				509F539E255738B5646D869F /* main.swift */,
+				663045EB025C51FDD3A84A70 /* MainWindowController.swift */,
+				3FA1011BECCF91E02E440409 /* StartViewController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		D2CB9467B19A8704D0FE2F84 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				B64FFD4639C5FD93774319DE /* AudioPlaybackService.swift */,
+				512A7EF8797DA44295CBBF66 /* WaveformExtractor.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		F4DD72C7F019817BE6133EC3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3C188F92505E65DC2D480046 /* RhythmReplica.app */,
+				12760FB59EDA7B556E56B7D4 /* RhythmReplicaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F8D6011E3ADADFE11E776FC5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4844D7A8D7FA5982D9A1563F /* SampleCharts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FC480E6B830A9154D792E129 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				3B1AA38F6A569258408264BE /* TimeFormatting.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		025C44EF3906C1321600D00D /* RhythmReplicaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D77398DF7C74F4096230A8A6 /* Build configuration list for PBXNativeTarget "RhythmReplicaTests" */;
+			buildPhases = (
+				3E9CF3DA4FAFECEBC471FB5A /* Sources */,
+				34DBF8047F1E390B91BE3D85 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CF2862561BDBA6B8B383773 /* PBXTargetDependency */,
+			);
+			name = RhythmReplicaTests;
+			packageProductDependencies = (
+			);
+			productName = RhythmReplicaTests;
+			productReference = 12760FB59EDA7B556E56B7D4 /* RhythmReplicaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		636B0F69BA6B7C064B0A7171 /* RhythmReplica */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 159255F9DC2B55EEB7B8D18A /* Build configuration list for PBXNativeTarget "RhythmReplica" */;
+			buildPhases = (
+				7C517DFDB64C07165A92C1E9 /* Sources */,
+				C7B4D00858E95CE56D0C4FC8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RhythmReplica;
+			packageProductDependencies = (
+			);
+			productName = RhythmReplica;
+			productReference = 3C188F92505E65DC2D480046 /* RhythmReplica.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B1D9D01443916FDDFBB507D2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					025C44EF3906C1321600D00D = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					636B0F69BA6B7C064B0A7171 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1015A2B9175182B1A8C47D0F /* Build configuration list for PBXProject "RhythmReplica" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = BD382353F4351C42951EE2A9;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F4DD72C7F019817BE6133EC3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				636B0F69BA6B7C064B0A7171 /* RhythmReplica */,
+				025C44EF3906C1321600D00D /* RhythmReplicaTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34DBF8047F1E390B91BE3D85 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F851FC76A5EF54487A13DB21 /* lumina-sample.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7B4D00858E95CE56D0C4FC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				043B7FB51B1B1CAB6091D28D /* sample-chart.rrchart.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3E9CF3DA4FAFECEBC471FB5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C89F3F2EEBDF4816731DFB0F /* CoreLogicTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C517DFDB64C07165A92C1E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				526FE9FD4D1BA81D8BD7DA9F /* AppDelegate.swift in Sources */,
+				1367004E8C096C2FFD1F4409 /* AppEnvironment.swift in Sources */,
+				61F0EE23BF4CABF079564E57 /* AppMain.swift in Sources */,
+				D72E5A1FFE047D84D3FA1212 /* AudioPlaybackService.swift in Sources */,
+				56DF42EE6C08D7B27990984C /* CacheManager.swift in Sources */,
+				9AC8A4CA0AA34FAA97452399 /* Chart.swift in Sources */,
+				11CBBA94FFC5F9C9351EF2C0 /* ChartExporter.swift in Sources */,
+				70CDA9C526FB245041F925B7 /* ChartLoader.swift in Sources */,
+				D0DD72D7BBBFB614EFDFA411 /* ChartValidator.swift in Sources */,
+				98B232A11FE94698989D608E /* DesignTokens.swift in Sources */,
+				CF6552D8F9380E2F6D153470 /* EditorMode.swift in Sources */,
+				1B1E36ECE3B3FE06CFA17A69 /* EditorTimelineView.swift in Sources */,
+				07342DB14BEE82708F62FB6D /* EditorViewController.swift in Sources */,
+				23DCF15C67923140D7FDDB8C /* ExternalToolDetector.swift in Sources */,
+				5B0B7AFAE3F7169AE2158AEC /* GameEngine.swift in Sources */,
+				EA562A2BF3BC4D771D1D249E /* InputManager.swift in Sources */,
+				9CDE302D1E7F921FE36510D4 /* JudgementEngine.swift in Sources */,
+				F354C0EFBF38321DF58C8876 /* KeyBindingManager.swift in Sources */,
+				7A5D67ADF5FB6D6DCF2E474D /* MainWindowController.swift in Sources */,
+				E622252904060E6998B04512 /* NoteRenderer.swift in Sources */,
+				4E9A009BE513DA268A31183A /* PlayerViewController.swift in Sources */,
+				5851D9E1E424DD8DA9A59F5F /* PreferencesStore.swift in Sources */,
+				EC0EF459BD410BA91212B570 /* RecentProjectsStore.swift in Sources */,
+				A903A5C099500C74ED310BFA /* ResultViewController.swift in Sources */,
+				8BA4A14CE57C20E34D1BAF2B /* ScoreCalculator.swift in Sources */,
+				1A5805815DB49222DD87FFCA /* SettingsViewController.swift in Sources */,
+				E3B9D025F109B9250C8D7381 /* StartViewController.swift in Sources */,
+				D48EAA71F8004E68D7A52A1C /* TimeFormatting.swift in Sources */,
+				971417877892707E6CCA346F /* TimelineMiniMapView.swift in Sources */,
+				142B3EB4782FE9E50F5D5922 /* TimingConverter.swift in Sources */,
+				BA1113255A34520B95FF662D /* WaveformExtractor.swift in Sources */,
+				65073DA6662DBA35CCDEA72F /* WaveformView.swift in Sources */,
+				75BD2780A2EC6CEBD06C3E68 /* YouTubeImportService.swift in Sources */,
+				C156C07B02429549254E5CBA /* YouTubeImportViewController.swift in Sources */,
+				DEF72DAD43A359671B9E5C92 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CF2862561BDBA6B8B383773 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 636B0F69BA6B7C064B0A7171 /* RhythmReplica */;
+			targetProxy = 90447417E91B1A430C52CB56 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		214210F722F4B2DCCE49E09C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bssm.rhythmreplica;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		46FAB6A57A6A967D8CE3D68E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm Replica";
+				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"LSHandlerRank\": \"Owner\"]]";
+				INFOPLIST_KEY_LSMinimumSystemVersion = 13.0;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Rhythm Replica uses user-selected helper tools for optional import workflows.";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 BSSM OSS";
+				INFOPLIST_KEY_NSMainNibFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]], \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeConformsTo\": [\"public.json\"]]]";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = "Rhythm Replica";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		66F52AA5AE397BC9499B55D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RhythmReplica.app/Contents/MacOS/RhythmReplica";
+			};
+			name = Debug;
+		};
+		6C943B9D3860F6A71905463A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RhythmReplica.app/Contents/MacOS/RhythmReplica";
+			};
+			name = Release;
+		};
+		7C0253062AF5F9EE51C6E656 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bssm.rhythmreplica;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		F801A2779F5B105197052F23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rhythm Replica";
+				INFOPLIST_KEY_CFBundleDocumentTypes = "[[\"CFBundleTypeName\": \"Rhythm Replica Chart\", \"LSItemContentTypes\": [\"com.bssm.rhythm-replica.chart\"], \"LSHandlerRank\": \"Owner\"]]";
+				INFOPLIST_KEY_LSMinimumSystemVersion = 13.0;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Rhythm Replica uses user-selected helper tools for optional import workflows.";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 BSSM OSS";
+				INFOPLIST_KEY_NSMainNibFile = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_UTExportedTypeDeclarations = "[[\"UTTypeTagSpecification\": [\"public.filename-extension\": [\"rrchart.json\", \"json\"]], \"UTTypeIdentifier\": \"com.bssm.rhythm-replica.chart\", \"UTTypeDescription\": \"Rhythm Replica Chart JSON\", \"UTTypeConformsTo\": [\"public.json\"]]]";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = "Rhythm Replica";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1015A2B9175182B1A8C47D0F /* Build configuration list for PBXProject "RhythmReplica" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				214210F722F4B2DCCE49E09C /* Debug */,
+				7C0253062AF5F9EE51C6E656 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		159255F9DC2B55EEB7B8D18A /* Build configuration list for PBXNativeTarget "RhythmReplica" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46FAB6A57A6A967D8CE3D68E /* Debug */,
+				F801A2779F5B105197052F23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D77398DF7C74F4096230A8A6 /* Build configuration list for PBXNativeTarget "RhythmReplicaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66F52AA5AE397BC9499B55D7 /* Debug */,
+				6C943B9D3860F6A71905463A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B1D9D01443916FDDFBB507D2 /* Project object */;
+}
