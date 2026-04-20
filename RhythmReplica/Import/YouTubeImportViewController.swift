@@ -2,14 +2,16 @@ import AppKit
 
 final class YouTubeImportViewController: NSViewController {
     private let service: YouTubeImportService
+    private let preferencesStore: PreferencesStore
     private let urlField = NSTextField(string: "")
     private let statusLabel = NSTextField(labelWithString: "")
     private let metadataLabel = NSTextField(wrappingLabelWithString: "")
     private let progressIndicator = NSProgressIndicator()
     private var currentTask: YouTubeImportTask?
 
-    init(service: YouTubeImportService) {
+    init(service: YouTubeImportService, preferencesStore: PreferencesStore) {
         self.service = service
+        self.preferencesStore = preferencesStore
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -83,7 +85,23 @@ final class YouTubeImportViewController: NSViewController {
 
     @objc private func startImport() {
         do {
-            let task = try service.startImport(from: urlField.stringValue)
+            let preferences = preferencesStore.load()
+            let destination: URL?
+            switch preferences.youtubeImportBehavior {
+            case .cacheFolder:
+                destination = nil
+            case .askEveryTime:
+                let panel = NSOpenPanel()
+                panel.canChooseDirectories = true
+                panel.canChooseFiles = false
+                panel.allowsMultipleSelection = false
+                guard panel.runModal() == .OK else {
+                    statusLabel.stringValue = "가져오기 저장 위치 선택이 취소되었습니다."
+                    return
+                }
+                destination = panel.url
+            }
+            let task = try service.startImport(from: urlField.stringValue, destinationDirectory: destination)
             currentTask = task
             progressIndicator.startAnimation(nil)
             statusLabel.stringValue = "가져오기를 시작했습니다."

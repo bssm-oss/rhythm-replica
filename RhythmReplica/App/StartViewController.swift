@@ -52,9 +52,13 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         recentList.backgroundColor = .clear
         recentList.textColor = RRColor.primaryText
         recentList.font = RRTypography.body()
+        recentList.setAccessibilityLabel("Recent projects list")
 
         toolStatusLabel.textColor = RRColor.warning
         toolStatusLabel.font = RRTypography.body()
+        view.setAccessibilityLabel("Start screen")
+        recentPopup.setAccessibilityLabel("Recent project selector")
+        reopenRecentButton.setAccessibilityLabel("Reopen selected recent project")
         refreshRecentItems()
 
         let recentControls = NSStackView(views: [recentPopup, reopenRecentButton])
@@ -123,6 +127,7 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         panel.beginSheetModal(for: view.window!) { [weak self] response in
             guard response == .OK, let url = panel.url else { return }
             self?.environment.sessionStore.currentAudioURL = url
+            self?.syncChartAudioFileName(with: url)
             self?.toolStatusLabel.stringValue = "오디오 선택됨: \(url.lastPathComponent)"
             self?.refreshRecentItems()
         }
@@ -146,7 +151,7 @@ final class StartViewController: NSViewController, NSDraggingDestination {
     }
 
     @objc private func showYouTubeStatus() {
-        let controller = YouTubeImportViewController(service: environment.youtubeImportService)
+        let controller = YouTubeImportViewController(service: environment.youtubeImportService, preferencesStore: environment.preferencesStore)
         let window = NSWindow(contentViewController: controller)
         window.title = "YouTube Import"
         window.styleMask = [.titled, .closable]
@@ -174,8 +179,16 @@ final class StartViewController: NSViewController, NSDraggingDestination {
             }
         case "mp3", "m4a", "wav", "aac", "flac":
             environment.sessionStore.currentAudioURL = url
+            syncChartAudioFileName(with: url)
         default:
             break
         }
+    }
+
+    private func syncChartAudioFileName(with url: URL) {
+        guard environment.sessionStore.currentChart != .empty else { return }
+        var chart = environment.sessionStore.currentChart
+        chart.audioFileName = url.lastPathComponent
+        environment.sessionStore.currentChart = chart
     }
 }

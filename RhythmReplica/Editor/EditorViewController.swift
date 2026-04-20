@@ -122,6 +122,10 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         if let url = environment.sessionStore.currentAudioURL {
             loadWaveform(for: url)
         }
+        view.setAccessibilityLabel("Chart editor screen")
+        timelineView.setAccessibilityLabel("Chart timeline")
+        waveformView.setAccessibilityLabel("Audio waveform")
+        miniMapView.setAccessibilityLabel("Timeline minimap")
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionAudioChange), name: .sessionAudioDidChange, object: environment.sessionStore)
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionChartChange), name: .sessionChartDidChange, object: environment.sessionStore)
         (view as? EditorContainerView)?.keyDownHandler = { [weak self] event in
@@ -327,6 +331,10 @@ final class EditorViewController: NSViewController, NSWindowDelegate {
         panel.beginSheetModal(for: view.window!) { [weak self] response in
             guard response == .OK, let url = panel.url, let self else { return }
             self.environment.sessionStore.currentAudioURL = url
+            if self.chart != .empty {
+                self.chart.audioFileName = url.lastPathComponent
+                self.environment.sessionStore.currentChart = self.chart
+            }
             do {
                 try self.environment.audioPlaybackService.load(url: url)
                 self.loadWaveform(for: url)

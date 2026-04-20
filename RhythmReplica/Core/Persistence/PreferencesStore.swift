@@ -11,6 +11,11 @@ enum ThemePreference: String, Codable, CaseIterable {
     case light
 }
 
+enum YouTubeImportBehavior: String, Codable, CaseIterable {
+    case cacheFolder
+    case askEveryTime
+}
+
 struct KeyBindingConfiguration: Codable, Equatable {
     var lane0: String = "d"
     var lane1: String = "f"
@@ -24,6 +29,8 @@ struct Preferences: Codable, Equatable {
     var judgementLineRatio: Double = 0.85
     var volume: Double = 1.0
     var theme: ThemePreference = .system
+    var outputDeviceName: String = "System Default"
+    var youtubeImportBehavior: YouTubeImportBehavior = .cacheFolder
     var keyBindings: KeyBindingConfiguration = .init()
 }
 
