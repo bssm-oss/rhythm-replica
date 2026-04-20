@@ -7,6 +7,9 @@ final class SettingsViewController: NSViewController {
     private let volumeSlider = NSSlider(value: 1, minValue: 0, maxValue: 1, target: nil, action: nil)
     private let defaultSpeedField = NSTextField(string: "2.0")
     private let judgementLineField = NSTextField(string: "0.85")
+    private let perfectWindowField = NSTextField(string: "60")
+    private let goodWindowField = NSTextField(string: "120")
+    private let badWindowField = NSTextField(string: "180")
     private let themePopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let outputDevicePopup = NSPopUpButton(frame: .zero, pullsDown: false)
     private let youtubeBehaviorPopup = NSPopUpButton(frame: .zero, pullsDown: false)
@@ -40,6 +43,9 @@ final class SettingsViewController: NSViewController {
         volumeSlider.doubleValue = preferences.volume
         defaultSpeedField.stringValue = String(preferences.defaultSpeed)
         judgementLineField.stringValue = String(preferences.judgementLineRatio)
+        perfectWindowField.stringValue = String(preferences.perfectWindowMilliseconds)
+        goodWindowField.stringValue = String(preferences.goodWindowMilliseconds)
+        badWindowField.stringValue = String(preferences.badWindowMilliseconds)
         lane0Field.stringValue = preferences.keyBindings.lane0
         lane1Field.stringValue = preferences.keyBindings.lane1
         lane2Field.stringValue = preferences.keyBindings.lane2
@@ -47,8 +53,9 @@ final class SettingsViewController: NSViewController {
 
         themePopup.addItems(withTitles: ThemePreference.allCases.map(\.rawValue))
         themePopup.selectItem(withTitle: preferences.theme.rawValue)
-        outputDevicePopup.addItems(withTitles: ["System Default"])
+        outputDevicePopup.addItems(withTitles: ["System Default (routing not configurable yet)"])
         outputDevicePopup.selectItem(withTitle: preferences.outputDeviceName)
+        outputDevicePopup.isEnabled = false
         youtubeBehaviorPopup.addItems(withTitles: YouTubeImportBehavior.allCases.map(\.rawValue))
         youtubeBehaviorPopup.selectItem(withTitle: preferences.youtubeImportBehavior.rawValue)
         let detection = environment.youtubeImportService.detectTools()
@@ -67,6 +74,9 @@ final class SettingsViewController: NSViewController {
             labeled("Volume", volumeSlider),
             labeled("Default Speed", defaultSpeedField),
             labeled("Judgement Line Ratio", judgementLineField),
+            labeled("Perfect Window (ms)", perfectWindowField),
+            labeled("Good Window (ms)", goodWindowField),
+            labeled("Bad Window (ms)", badWindowField),
             keyBindingRow(),
             labeled("Theme", themePopup),
             labeled("Audio Output Device", outputDevicePopup),
@@ -101,8 +111,11 @@ final class SettingsViewController: NSViewController {
         preferences.volume = volumeSlider.doubleValue
         preferences.defaultSpeed = Double(defaultSpeedField.stringValue) ?? preferences.defaultSpeed
         preferences.judgementLineRatio = Double(judgementLineField.stringValue) ?? preferences.judgementLineRatio
+        preferences.perfectWindowMilliseconds = Double(perfectWindowField.stringValue) ?? preferences.perfectWindowMilliseconds
+        preferences.goodWindowMilliseconds = Double(goodWindowField.stringValue) ?? preferences.goodWindowMilliseconds
+        preferences.badWindowMilliseconds = Double(badWindowField.stringValue) ?? preferences.badWindowMilliseconds
         preferences.theme = ThemePreference(rawValue: themePopup.selectedItem?.title ?? ThemePreference.system.rawValue) ?? .system
-        preferences.outputDeviceName = outputDevicePopup.selectedItem?.title ?? "System Default"
+        preferences.outputDeviceName = outputDevicePopup.selectedItem?.title ?? "System Default (routing not configurable yet)"
         preferences.youtubeImportBehavior = YouTubeImportBehavior(rawValue: youtubeBehaviorPopup.selectedItem?.title ?? YouTubeImportBehavior.cacheFolder.rawValue) ?? .cacheFolder
         preferences.keyBindings = KeyBindingConfiguration(
             lane0: lane0Field.stringValue.lowercased(),

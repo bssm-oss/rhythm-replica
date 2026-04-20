@@ -11,6 +11,7 @@ final class PlayerViewController: NSViewController {
     private let hpLabel = NSTextField(labelWithString: "HP 100")
     private let timeLabel = NSTextField(labelWithString: "00:00 / 00:00")
     private let speedLabel = NSTextField(labelWithString: "x2.0")
+    private let progressIndicator = NSProgressIndicator()
     private let resultLabel = NSTextField(labelWithString: "")
     private let mismatchLabel = NSTextField(labelWithString: "")
     private var timer: Timer?
@@ -44,6 +45,12 @@ final class PlayerViewController: NSViewController {
         let speedDownButton = NSButton(title: "- Speed", target: self, action: #selector(speedDown))
         let speedUpButton = NSButton(title: "+ Speed", target: self, action: #selector(speedUp))
 
+        progressIndicator.isIndeterminate = false
+        progressIndicator.minValue = 0
+        progressIndicator.maxValue = 1
+        progressIndicator.doubleValue = 0
+        progressIndicator.controlSize = .regular
+
         [statusLabel, scoreLabel, comboLabel, hpLabel, timeLabel, speedLabel, resultLabel, mismatchLabel].forEach {
             $0.textColor = RRColor.primaryText
             $0.font = RRTypography.body()
@@ -70,7 +77,7 @@ final class PlayerViewController: NSViewController {
         warningRow.orientation = .horizontal
         warningRow.spacing = 8
 
-        let stack = NSStackView(views: [header, stats, warningRow, playfieldView])
+        let stack = NSStackView(views: [header, stats, progressIndicator, warningRow, playfieldView])
         stack.orientation = .vertical
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -123,6 +130,7 @@ final class PlayerViewController: NSViewController {
         comboLabel.stringValue = "Combo \(score.combo)"
         hpLabel.stringValue = "HP \(score.hp)"
         timeLabel.stringValue = "\(TimeFormatting.clock(environment.audioPlaybackService.currentTime)) / \(TimeFormatting.clock(environment.audioPlaybackService.duration))"
+        progressIndicator.doubleValue = environment.audioPlaybackService.duration > 0 ? min(1, max(0, environment.audioPlaybackService.currentTime / environment.audioPlaybackService.duration)) : 0
         speedLabel.stringValue = String(format: "x%.1f", engine.speed)
         resultLabel.stringValue = score.hp == 0 ? "GAME OVER" : "Rank \(engine.rank()) • Accuracy \(Int(score.accuracy * 100))%"
         updateMismatchWarning()

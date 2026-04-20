@@ -8,7 +8,6 @@ struct VisibleNote {
 
 final class GameEngine {
     private let audioService: AudioPlaybackService
-    private let judgementEngine: JudgementEngine
     private let preferencesStore: PreferencesStore
     private(set) var chart: Chart = .empty
     private(set) var scoreState = ScoreState()
@@ -23,9 +22,17 @@ final class GameEngine {
 
     init(audioService: AudioPlaybackService, judgementEngine: JudgementEngine = .init(), preferencesStore: PreferencesStore) {
         self.audioService = audioService
-        self.judgementEngine = judgementEngine
         self.preferencesStore = preferencesStore
         self.speed = preferencesStore.load().defaultSpeed
+    }
+
+    private var judgementEngine: JudgementEngine {
+        let preferences = preferencesStore.load()
+        return JudgementEngine(windows: JudgementWindows(
+            perfect: preferences.perfectWindowMilliseconds / 1000,
+            good: preferences.goodWindowMilliseconds / 1000,
+            bad: preferences.badWindowMilliseconds / 1000
+        ))
     }
 
     var currentTime: Double {
