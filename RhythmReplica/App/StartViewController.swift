@@ -128,7 +128,9 @@ final class StartViewController: NSViewController, NSDraggingDestination {
             guard response == .OK, let url = panel.url else { return }
             self?.environment.sessionStore.currentAudioURL = url
             self?.syncChartAudioFileName(with: url)
-            self?.toolStatusLabel.stringValue = "오디오 선택됨: \(url.lastPathComponent)"
+            if let self {
+                self.toolStatusLabel.stringValue = self.persistChartAudioLinkStatus(audioURL: url)
+            }
             self?.refreshRecentItems()
         }
     }
@@ -180,6 +182,7 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         case "mp3", "m4a", "wav", "aac", "flac":
             environment.sessionStore.currentAudioURL = url
             syncChartAudioFileName(with: url)
+            toolStatusLabel.stringValue = persistChartAudioLinkStatus(audioURL: url)
         default:
             break
         }
@@ -190,5 +193,17 @@ final class StartViewController: NSViewController, NSDraggingDestination {
         var chart = environment.sessionStore.currentChart
         chart.audioFileName = url.lastPathComponent
         environment.sessionStore.currentChart = chart
+    }
+
+    private func persistChartAudioLinkStatus(audioURL: URL) -> String {
+        guard environment.sessionStore.currentChart != .empty else {
+            return "오디오 선택됨: \(audioURL.lastPathComponent)"
+        }
+        do {
+            try environment.persistCurrentChart()
+            return "오디오 연결 정보를 차트에 저장했습니다: \(audioURL.lastPathComponent)"
+        } catch {
+            return error.localizedDescription
+        }
     }
 }

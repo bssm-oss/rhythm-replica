@@ -24,14 +24,33 @@ jobs:
         run: ./scripts/package-dmg.sh
       - name: SHA256
         run: ./scripts/sha256.sh build/RhythmReplica.dmg > build/RhythmReplica.dmg.sha256
-      - name: Archive signing prerequisites
+      - name: Import signing certificate
+        if: ${{ secrets.CERTIFICATE_P12 != '' && secrets.CERTIFICATE_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
         run: |
-          echo "APPLE_ID=${{ secrets.APPLE_ID != '' }}"
-          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID != '' }}"
-          echo "APP_SPECIFIC_PASSWORD=${{ secrets.APP_SPECIFIC_PASSWORD != '' }}"
-          echo "DEVELOPER_ID_APPLICATION=${{ secrets.DEVELOPER_ID_APPLICATION != '' }}"
-          echo "CERTIFICATE_P12=${{ secrets.CERTIFICATE_P12 != '' }}"
-          echo "CERTIFICATE_PASSWORD=${{ secrets.CERTIFICATE_PASSWORD != '' }}"
+          echo "$CERTIFICATE_P12" | base64 --decode > build/certificate.p12
+          security create-keychain -p runner build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p runner build.keychain
+          security import build/certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k runner build.keychain
+        env:
+          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+      - name: Sign app bundle
+        if: ${{ secrets.CERTIFICATE_P12 != '' && secrets.CERTIFICATE_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
+        run: |
+          codesign --force --deep --options runtime --sign "$DEVELOPER_ID_APPLICATION" "build/Products/Rhythm Replica.app"
+        env:
+          DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+      - name: Notarize app bundle
+        if: ${{ secrets.APPLE_ID != '' && secrets.APPLE_TEAM_ID != '' && secrets.APP_SPECIFIC_PASSWORD != '' && secrets.DEVELOPER_ID_APPLICATION != '' }}
+        run: |
+          xcrun notarytool submit "build/RhythmReplica.dmg" --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APP_SPECIFIC_PASSWORD" --wait
+          xcrun stapler staple "build/Products/Rhythm Replica.app"
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:

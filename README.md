@@ -61,7 +61,7 @@ brew tap bssm-oss/tap
 brew install --cask rhythm-replica
 ```
 
-> 현재 저장소에는 Cask 예시 파일만 포함되어 있습니다. 실제 설치 가능 상태는 GitHub Release와 SHA256이 준비된 뒤입니다.
+> 릴리즈가 생성되면 `./scripts/update-cask.sh <version> <sha256>`로 Cask의 버전과 SHA256을 갱신합니다.
 
 ## 로컬 개발 시작
 
