@@ -20,6 +20,7 @@ targets:
       - path: RhythmReplica
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         PRODUCT_NAME: Rhythm Replica
         INFOPLIST_KEY_CFBundleDisplayName: Rhythm Replica
         INFOPLIST_KEY_LSMinimumSystemVersion: 13.0

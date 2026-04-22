@@ -8,6 +8,7 @@ APP_BUNDLE_PATH="$ROOT_DIR/build/Products/Rhythm Replica.app"
 APP_CONTENTS_PATH="$APP_BUNDLE_PATH/Contents"
 APP_MACOS_PATH="$APP_CONTENTS_PATH/MacOS"
 APP_RESOURCES_PATH="$APP_CONTENTS_PATH/Resources"
+ICON_SOURCE_PATH="$ROOT_DIR/RhythmReplica/Resources/AppIcon.icns"
 VERSION="$(python3 - <<'PY'
 from pathlib import Path
 import re
@@ -29,6 +30,11 @@ if [[ ! -d "/Applications/Xcode.app" ]]; then
   if [[ -d ".build/release/RhythmReplica_RhythmReplicaKit.bundle" ]]; then
     cp -R ".build/release/RhythmReplica_RhythmReplicaKit.bundle" "$APP_RESOURCES_PATH/"
   fi
+  ICON_PLIST_FRAGMENT=""
+  if [[ -f "$ICON_SOURCE_PATH" ]]; then
+    cp "$ICON_SOURCE_PATH" "$APP_RESOURCES_PATH/"
+    ICON_PLIST_FRAGMENT=$'  <key>CFBundleIconFile</key>\n  <string>AppIcon</string>'
+  fi
   cat > "$APP_CONTENTS_PATH/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -46,6 +52,7 @@ if [[ ! -d "/Applications/Xcode.app" ]]; then
   <string>Rhythm Replica</string>
   <key>CFBundleDisplayName</key>
   <string>Rhythm Replica</string>
+${ICON_PLIST_FRAGMENT}
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
